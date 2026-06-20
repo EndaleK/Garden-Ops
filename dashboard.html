@@ -826,6 +826,13 @@ html[data-theme="night"] .wxa.warn b{color:var(--amber-bri)}
 .scanthumb img{width:100%;height:100%;object-fit:cover;display:block}
 .scanthumb .rm{position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;border:none;background:rgba(0,0,0,.55);color:#fff;font-size:14px;line-height:1;cursor:pointer;display:grid;place-items:center;padding:0}
 .scancount{font-size:12px;color:var(--ink-dim);margin-top:7px}
+.acwrap{position:relative;display:inline-block}
+.acwrap:focus-within{z-index:6}
+.ac{position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:60;background:var(--surface);border:1px solid var(--line2);border-radius:10px;box-shadow:var(--shadow-lg);max-height:240px;overflow:auto;display:none}
+.ac.open{display:block}
+.ac-item{padding:8px 12px;font-size:14px;cursor:pointer;display:flex;justify-content:space-between;gap:12px;align-items:center;color:var(--ink)}
+.ac-item:hover{background:var(--surface2)}
+.ac-item .cat{font-size:11px;color:var(--ink-dim);white-space:nowrap}
 .aiout b{color:var(--forest2)}
 .warnote{font-size:12px;color:var(--ink-dim);margin-top:8px}
 /* fertilizer/pest guide (scoped) */
@@ -899,6 +906,29 @@ function plantCategoryFromName(name){
   return null;
 }
 function addNamedPlant(b,name){b.plants.push({type:plantCategoryFromName(name)||'leafy',name:name,qty:1});saveCfg();rerenderCurrent();}
+/* styled plant-name autocomplete (replaces the native <datalist>, so the dropdown matches the rest of the UI) */
+function acRender(input){
+  var wrap=input.closest('.acwrap');if(!wrap)return;var box=wrap.querySelector('.ac');if(!box)return;
+  var q=(input.value||'').toLowerCase().trim();
+  if(!q){box.classList.remove('open');box.innerHTML='';return;}
+  var names=Object.keys(COMMON_PLANTS);
+  var starts=names.filter(function(n){return n.toLowerCase().indexOf(q)===0;});
+  var incl=names.filter(function(n){return n.toLowerCase().indexOf(q)>0;});
+  var hits=starts.concat(incl).slice(0,8);
+  if(!hits.length){box.classList.remove('open');box.innerHTML='';return;}
+  box.innerHTML=hits.map(function(n){var cat=COMMON_PLANTS[n];var lab=(typeof PLANTS!=='undefined'&&PLANTS[cat]&&PLANTS[cat].label)||cat;return '<div class="ac-item" data-name="'+esc(n)+'"><span>'+esc(n)+'</span><span class="cat">'+esc(lab)+'</span></div>';}).join('');
+  box.classList.add('open');
+}
+function onMgInput(e){var inp=e.target.closest('[data-field=pname]');if(inp)acRender(inp);}
+function onMgFocusin(e){var inp=e.target.closest('[data-field=pname]');if(inp&&inp.value)acRender(inp);}
+function onMgMousedown(e){
+  var it=e.target.closest('.ac-item');if(!it)return;e.preventDefault();
+  var wrap=it.closest('.acwrap'),inp=wrap&&wrap.querySelector('[data-field=pname]');if(!inp)return;
+  inp.value=it.getAttribute('data-name');
+  var box=wrap.querySelector('.ac');if(box){box.classList.remove('open');box.innerHTML='';}
+  inp.dispatchEvent(new Event('change',{bubbles:true}));
+}
+function onMgFocusout(e){var inp=e.target.closest('[data-field=pname]');if(inp){var wrap=inp.closest('.acwrap');setTimeout(function(){var box=wrap&&wrap.querySelector('.ac');if(box){box.classList.remove('open');}},150);}}
 
 /* ---------- build garden from a photo (uses the Diagnose tab's AI provider) ---------- */
 let SCAN_IMGS=[],SCAN_RESULT=null;const SCAN_MAX=6;
@@ -975,7 +1005,7 @@ function paneMyGarden(){
     const area=((b.length_m||0)*(b.width_m||0)).toFixed(1);
     const plants=b.plants.map((p,i)=>{
       const opts=Object.entries(PLANTS).map(([id,pl])=>'<option value="'+id+'"'+(p.type===id?' selected':'')+'>'+esc(pl.label)+'</option>').join('');
-      return '<div class="plantrow"><input class="in" style="min-width:165px" list="plantnames" placeholder="type a plant, e.g. Tomato" value="'+esc(p.name||'')+'" data-field="pname" data-id="'+b.id+':'+i+'">'+
+      return '<div class="plantrow"><span class="acwrap"><input class="in" autocomplete="off" style="min-width:165px" placeholder="type a plant, e.g. Tomato" value="'+esc(p.name||'')+'" data-field="pname" data-id="'+b.id+':'+i+'"><div class="ac"></div></span>'+
         '<select class="in" data-field="ptype" data-id="'+b.id+':'+i+'" title="care category — auto-set from the name; change if needed">'+opts+'</select>'+
         '<input class="in" style="width:70px" type="number" min="1" value="'+(p.qty||1)+'" data-field="pqty" data-id="'+b.id+':'+i+'" title="how many">'+
         '<button class="btn sm danger" data-act="delplant" data-id="'+b.id+':'+i+'">remove</button></div>';
@@ -1019,10 +1049,14 @@ function paneMyGarden(){
       bedsHtml+
       '<div style="margin-top:12px"><button class="btn" data-act="addbed">+ Add a bed</button></div>'+
       '<div class="savednote">✓ Everything here saves automatically to this browser — it’s here when you come back.</div>'+
-      '<datalist id="plantnames">'+Object.keys(COMMON_PLANTS).map(function(n){return '<option value="'+n+'">';}).join('')+'</datalist></section>';
+      '</section>';
 
   el.addEventListener('click',onMgClick);
   el.addEventListener('change',onMgChange);
+  el.addEventListener('input',onMgInput);
+  el.addEventListener('focusin',onMgFocusin);
+  el.addEventListener('mousedown',onMgMousedown);
+  el.addEventListener('focusout',onMgFocusout);
   (function(){var sd=el.querySelector('[data-scandrop]'),sf=el.querySelector('[data-scanfile]'),spw=el.querySelector('[data-scanprev]');
     if(sd&&sf){sd.addEventListener('click',function(){sf.click();});
       sd.addEventListener('dragover',function(e){e.preventDefault();sd.classList.add('over');});
