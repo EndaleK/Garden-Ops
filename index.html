@@ -71,6 +71,21 @@
   .ecard .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:13px}
   .pill{font-size:11px;font-weight:600;color:var(--ink-soft);background:var(--inset);border:1px solid var(--line2);border-radius:999px;padding:2px 9px}
 
+  /* AI showcase (build-from-photo + diagnose) */
+  .aicards{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:820px){.aicards{grid-template-columns:1fr}}
+  .aicard{position:relative;overflow:hidden;display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:24px;transition:.2s var(--spring)}
+  .aicard::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(130% 90% at 100% 0,color-mix(in srgb,var(--forest2) 11%,transparent),transparent 58%)}
+  .aicard.diag::after{background:radial-gradient(130% 90% at 100% 0,color-mix(in srgb,var(--amber) 14%,transparent),transparent 58%)}
+  .aicard:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+  .aicard>*{position:relative;z-index:1}
+  .aicard .ic{width:52px;height:52px;border-radius:15px;display:grid;place-items:center;color:#fff;margin-bottom:15px}
+  .aicard .ic svg{width:27px;height:27px}
+  .aicard h3{font-family:var(--font-display);font-weight:600;font-size:1.3rem;margin:0 0 7px}
+  .aicard p{margin:0;color:var(--ink-soft);font-size:14px;line-height:1.55;flex:1}
+  .aicard .go{margin-top:16px;font-weight:600;font-size:13.5px;color:var(--forest2);display:inline-flex;align-items:center;gap:7px}
+  .aicard:hover .go{gap:11px}
+
   /* feature grid */
   .feat{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
   @media(max-width:820px){.feat{grid-template-columns:1fr 1fr}}
@@ -107,6 +122,9 @@
       <div class="hero-cta">
         <a class="btn" href="dashboard.html">Open the dashboard
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="btn ghost" href="dashboard.html#build">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L8 6H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1h-4Z"/><circle cx="12" cy="12.5" r="3.2"/></svg>
+          Build from a photo</a>
         <a class="btn ghost" href="fertilizer-pest-guide.html">Fertilizer &amp; pest guide</a>
       </div>
     </div>
@@ -121,6 +139,27 @@
     <div class="stat"><div class="v">65</div><div class="l">Plants tracked</div></div>
     <div class="stat live"><div class="v" id="liveTemp">—</div><div class="l" id="liveLbl">Edmonton now</div></div>
   </div>
+
+  <section>
+    <h2 class="sec-h">Point your camera. Skip the setup.</h2>
+    <p class="sec-sub">Two AI tools handle the tedious parts — building your garden, and figuring out what’s wrong with a plant.</p>
+    <div class="aicards">
+      <a class="aicard build" href="dashboard.html#build">
+        <div class="ic f"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L8 6H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1h-4Z"/><circle cx="12" cy="12.5" r="3.4"/></svg></div>
+        <h3>Build your garden from a photo</h3>
+        <p>Snap one or more photos of your beds. AI detects every bed and plant, merges multiple angles, and adds them with the right watering, feeding, and pest profiles — no manual entry.</p>
+        <div class="tags"><span class="pill">Multi-photo</span><span class="pill">Auto care profiles</span><span class="pill">No key on the live site</span></div>
+        <span class="go">Build from a photo →</span>
+      </a>
+      <a class="aicard diag" href="dashboard.html#diagnose">
+        <div class="ic a"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4v5a5 5 0 0 0 10 0V4"/><path d="M9 18a4 4 0 0 0 8 0v-3"/><circle cx="18" cy="13" r="2.3"/></svg></div>
+        <h3>Diagnose a sick plant</h3>
+        <p>Photograph a struggling plant, pest, or weed and get an instant ID plus an IPM-first treatment ladder — least-toxic first, with pollinator and pre-harvest safety noted.</p>
+        <div class="tags"><span class="pill">Instant ID</span><span class="pill">IPM-first plan</span><span class="pill">Hosted — no key</span></div>
+        <span class="go">Diagnose a plant →</span>
+      </a>
+    </div>
+  </section>
 
   <section>
     <h2 class="sec-h">Where to start</h2>
