@@ -919,10 +919,11 @@ function onMgChange(e){
 }
 
 /* ========== PANE: Diagnose (AI photo) ========== */
-let AICFG={provider:'deepseek',model:'',key:'',remember:false};
+let AICFG={provider:'hosted',model:'',key:'',remember:false};
 try{const s=localStorage.getItem('gardenAICfg');if(s)AICFG=Object.assign(AICFG,JSON.parse(s));}catch(e){}
+if(!['hosted','claude','openai','gemini'].includes(AICFG.provider))AICFG.provider='hosted';
 let DIAG_IMG=null; // {mime,b64,dataurl}
-const MODEL_DEFAULTS={deepseek:'deepseek-v4-flash',claude:'claude-sonnet-4-6',openai:'gpt-4o',gemini:'gemini-2.0-flash'};
+const MODEL_DEFAULTS={hosted:'',claude:'claude-sonnet-4-6',openai:'gpt-4o',gemini:'gemini-2.0-flash'};
 function diagPrompt(){
   const L=USERCFG.location,c=USERCFG.climate;
   const where=L?(L.city+(L.province?', '+L.province:'')):'a northern temperate garden';
@@ -934,19 +935,19 @@ function mdLite(s){return esc(s).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/
 
 function paneDiagnose(){
   const el=document.createElement('div');el.className='dx pane-pad';
-  const provOpt=p=>'<option value="'+p+'"'+(AICFG.provider===p?' selected':'')+'>'+({deepseek:'DeepSeek (hosted — no key)',claude:'Claude (Anthropic)',openai:'OpenAI',gemini:'Google Gemini'}[p])+'</option>';
-  const dsk=AICFG.provider==='deepseek';
+  const provOpt=p=>'<option value="'+p+'"'+(AICFG.provider===p?' selected':'')+'>'+({hosted:'Hosted — no key needed',claude:'Claude (Anthropic, BYO key)',openai:'OpenAI (BYO key)',gemini:'Google Gemini (BYO key)'}[p])+'</option>';
+  const dsk=AICFG.provider==='hosted';
   el.innerHTML=
     '<section><h2 class="sec">'+I.diag+' Diagnose a plant from a photo</h2>'+
     '<p class="lead">Upload a photo of a struggling plant, pest, or weed and get an IPM-first diagnosis and treatment plan. Bring your own AI key — it stays in your browser and is sent only to the provider you choose.</p></section>'+
 
     '<section><div class="card" style="padding:16px 18px">'+
       '<p class="mini-h">🔑 AI provider</p>'+
-      '<div class="row"><div class="fld"><label>Provider</label><select class="in" data-ai="provider">'+provOpt('deepseek')+provOpt('claude')+provOpt('openai')+provOpt('gemini')+'</select></div>'+
+      '<div class="row"><div class="fld"><label>Provider</label><select class="in" data-ai="provider">'+provOpt('hosted')+provOpt('claude')+provOpt('openai')+provOpt('gemini')+'</select></div>'+
       '<div class="fld"><label>Model</label><input class="in" data-ai="model" placeholder="'+MODEL_DEFAULTS[AICFG.provider]+'" value="'+esc(AICFG.model||'')+'"></div>'+
       '<div class="fld" style="flex:1;min-width:200px"><label>API key</label><input class="in" type="password" style="width:100%" data-ai="key" '+(dsk?'disabled ':'')+'placeholder="'+(dsk?'not needed — hosted proxy':'paste key')+'" value="'+esc(AICFG.key||'')+'"></div></div>'+
       '<label style="font-size:12.5px;color:var(--ink-soft);display:flex;gap:7px;align-items:center;margin-top:10px"><input type="checkbox" data-ai="remember"'+(AICFG.remember?' checked':'')+'> Remember key in this browser (localStorage)</label>'+
-      '<p class="warnote" data-keynote>'+(dsk?'<b>DeepSeek</b> runs through this site’s secure hosted proxy — no key needed in the browser. (The key is set server-side as <code>DEEPSEEK_API_KEY</code> on Vercel.) Works on the published site.':'Your key is stored only on this device and sent directly to the provider’s API. Leave “remember” off on shared computers.')+'</p></div></section>'+
+      '<p class="warnote" data-keynote>'+(dsk?'<b>Hosted</b> diagnosis runs through this site’s secure proxy — no key needed in the browser. Set a vision key (e.g. <code>GEMINI_API_KEY</code>) on Vercel. Works on the published site.':'Your key is stored only on this device and sent directly to the provider’s API. Leave “remember” off on shared computers.')+'</p></div></section>'+
 
     '<section><div class="card" style="padding:16px 18px">'+
       '<p class="mini-h">🌿 Photo</p>'+
@@ -965,9 +966,9 @@ function paneDiagnose(){
       else AICFG[k]=node.type==='checkbox'?node.checked:node.value;
       if(k==='provider'){
         const mi=el.querySelector('[data-ai=model]');if(mi){mi.placeholder=MODEL_DEFAULTS[node.value];}
-        const kf=el.querySelector('[data-ai=key]'),nt=el.querySelector('[data-keynote]'),isDs=node.value==='deepseek';
+        const kf=el.querySelector('[data-ai=key]'),nt=el.querySelector('[data-keynote]'),isDs=node.value==='hosted';
         if(kf){kf.disabled=isDs;kf.placeholder=isDs?'not needed — hosted proxy':'paste key';}
-        if(nt){nt.innerHTML=isDs?'<b>DeepSeek</b> runs through this site’s secure hosted proxy — no key needed in the browser. (The key is set server-side as <code>DEEPSEEK_API_KEY</code> on Vercel.) Works on the published site.':'Your key is stored only on this device and sent directly to the provider’s API. Leave “remember” off on shared computers.';}
+        if(nt){nt.innerHTML=isDs?'<b>Hosted</b> diagnosis runs through this site’s secure proxy — no key needed in the browser. Set a vision key (e.g. <code>GEMINI_API_KEY</code>) on Vercel. Works on the published site.':'Your key is stored only on this device and sent directly to the provider’s API. Leave “remember” off on shared computers.';}
       }
       if(AICFG.remember)saveAICfg();else{try{localStorage.removeItem('gardenAICfg');}catch(e){}}
     });
@@ -992,7 +993,7 @@ function loadImg(f,pw){
 async function runDiagnose(el){
   const st=el.querySelector('[data-status]'),out=el.querySelector('[data-out]');
   out.innerHTML='';
-  if(AICFG.provider!=='deepseek' && !AICFG.key){st.textContent='Add your API key first (or pick DeepSeek — it uses the hosted proxy).';return;}
+  if(AICFG.provider!=='hosted' && !AICFG.key){st.textContent='Add your API key first (or pick Hosted — it needs no key).';return;}
   if(!DIAG_IMG){st.textContent='Choose a photo first.';return;}
   const notes=(el.querySelector('[data-notes]').value||'').trim();
   st.textContent='Analyzing photo with '+AICFG.provider+'…';
@@ -1005,11 +1006,11 @@ async function runDiagnose(el){
 }
 async function aiDiagnose(provider,model,key,mime,b64,ctx){
   const prompt=diagPrompt()+(ctx?('\n\nGardener notes: '+ctx):'');
-  if(provider==='deepseek'){
-    // Hosted secure proxy — the DeepSeek key lives server-side (Vercel env DEEPSEEK_API_KEY), never in the browser.
+  if(provider==='hosted'){
+    // Hosted secure proxy — the vision key lives server-side (Vercel env, e.g. GEMINI_API_KEY), never in the browser.
     const r=await fetch((window.GARDEN_DIAG_PROXY||'/api/diagnose'),{method:'POST',headers:{'content-type':'application/json'},
-      body:JSON.stringify({mime:mime,b64:b64,notes:ctx||'',model:model})});
-    let j;try{j=await r.json();}catch(e){throw new Error('Hosted DeepSeek proxy not reachable — it works on the published site. Locally, pick Claude or Gemini with your own key.');}
+      body:JSON.stringify({mime:mime,b64:b64,notes:ctx||''})});
+    let j;try{j=await r.json();}catch(e){throw new Error('Hosted proxy not reachable — it works on the published site. Locally, pick Claude or Gemini with your own key.');}
     if(!r.ok)throw new Error(j.error||('Proxy HTTP '+r.status));
     return (j.text||'(no response)').trim();
   }
