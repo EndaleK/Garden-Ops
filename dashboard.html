@@ -923,7 +923,7 @@ let AICFG={provider:'hosted',model:'',key:'',remember:false};
 try{const s=localStorage.getItem('gardenAICfg');if(s)AICFG=Object.assign(AICFG,JSON.parse(s));}catch(e){}
 if(!['hosted','claude','openai','gemini'].includes(AICFG.provider))AICFG.provider='hosted';
 let DIAG_IMG=null; // {mime,b64,dataurl}
-const MODEL_DEFAULTS={hosted:'',claude:'claude-sonnet-4-6',openai:'gpt-4o',gemini:'gemini-2.0-flash'};
+const MODEL_DEFAULTS={hosted:'',claude:'claude-sonnet-4-6',openai:'gpt-4o',gemini:'gemini-flash-latest'};
 function diagPrompt(){
   const L=USERCFG.location,c=USERCFG.climate;
   const where=L?(L.city+(L.province?', '+L.province:'')):'a northern temperate garden';
