@@ -363,7 +363,7 @@ let WX=null,WXERR=null;
 async function fetchWeather(){
   const L=(typeof USERCFG!=='undefined'&&USERCFG.location)||DATA.garden.location;
   const url="https://api.open-meteo.com/v1/forecast?latitude="+L.lat+"&longitude="+L.lon
-    +"&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,et0_fao_evapotranspiration,wind_gusts_10m_max"
+    +"&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,et0_fao_evapotranspiration,wind_gusts_10m_max,weathercode"
     +"&past_days=7&forecast_days=7&timezone="+encodeURIComponent(L.timezone);
   try{const r=await fetch(url);if(!r.ok)throw new Error("HTTP "+r.status);WX=summarize(await r.json());}
   catch(e){WXERR=e.message||String(e);}
@@ -371,7 +371,7 @@ async function fetchWeather(){
 function summarize(raw){
   const d=raw.daily,days=[];
   for(let i=0;i<d.time.length;i++)days.push({date:d.time[i],tmax_c:d.temperature_2m_max[i],tmin_c:d.temperature_2m_min[i],
-    precip_mm:d.precipitation_sum[i],et0_mm:d.et0_fao_evapotranspiration[i],wind_gust_kmh:d.wind_gusts_10m_max[i]});
+    precip_mm:d.precipitation_sum[i],et0_mm:d.et0_fao_evapotranspiration[i],wind_gust_kmh:d.wind_gusts_10m_max[i],wcode:(d.weathercode?d.weathercode[i]:null)});
   const past=days.slice(0,7),future=days.slice(7),sum=(a,k)=>Math.round(a.reduce((s,x)=>s+(x[k]||0),0)*10)/10,FT=DATA.watering.FROST_TMIN_C;
   return{past_7d:{rain_total_mm:sum(past,'precip_mm'),et0_total_mm:sum(past,'et0_mm'),days:past},
     next_7d:{rain_total_mm:sum(future,'precip_mm'),et0_total_mm:sum(future,'et0_mm'),
@@ -804,6 +804,17 @@ async function geocodeCity(q){
 .aiout .mli::before{content:"•";position:absolute;left:3px;color:var(--forest2)}
 .aiout .msp{height:7px}
 a.brand,a.brand:hover{text-decoration:none}
+#wxAlertBar{position:relative;z-index:1}
+.wxa-wrap{padding:12px 0 0;display:flex;flex-direction:column;gap:8px}
+.wxa{display:flex;gap:10px;align-items:flex-start;padding:10px 14px;border-radius:12px;font-size:13.5px;border:1px solid var(--line);background:var(--surface)}
+.wxa .wxa-i{font-size:16px;flex:0 0 auto;line-height:1.3}
+.wxa.warn{background:color-mix(in srgb,var(--amber) 12%,transparent);border-color:color-mix(in srgb,var(--amber) 32%,transparent)}
+.wxa.warn b{color:var(--amber)}
+html[data-theme="night"] .wxa.warn b{color:var(--amber-bri)}
+.wxa.severe{background:color-mix(in srgb,var(--clay) 12%,transparent);border-color:color-mix(in srgb,var(--clay) 34%,transparent)}
+.wxa.severe b{color:var(--clay)}
+.wxa-enable{align-self:flex-start;font-family:var(--font-ui);font-weight:600;font-size:12.5px;cursor:pointer;border-radius:10px;padding:7px 12px;border:1px solid var(--forest2);background:transparent;color:var(--forest2)}
+.wxa-enable:hover{background:color-mix(in srgb,var(--forest2) 10%,transparent)}
 .aiout b{color:var(--forest2)}
 .warnote{font-size:12px;color:var(--ink-dim);margin-top:8px}
 /* fertilizer/pest guide (scoped) */
@@ -1486,6 +1497,78 @@ function setTheme(t){
   try{localStorage.setItem('gardenTheme',t);}catch(e){}
   if(window._booted){drawSeasonRing();if(CUR===0)paintChart();} // repaint color-dependent SVG
 }
+/* ===================== severe-weather alerts ===================== */
+I.bell='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>';
+I.bellOn='<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0" fill="none" stroke-linecap="round"/></svg>';
+const WX_ALERT_CFG={hardFreeze:-4,heat:29,highWind:60,severeWind:80,heavyRain:25};
+let ALERTS_ON=false; try{ALERTS_ON=localStorage.getItem('gardenAlertsOn')==='1';}catch(e){}
+function persistAlerts(){try{localStorage.setItem('gardenAlertsOn',ALERTS_ON?'1':'0');}catch(e){}}
+function alertSeen(){try{return JSON.parse(localStorage.getItem('gardenAlertSeen')||'[]');}catch(e){return [];}}
+function markSeen(keys){try{const c=alertSeen(),m=c.concat(keys.filter(k=>c.indexOf(k)<0)).slice(-60);localStorage.setItem('gardenAlertSeen',JSON.stringify(m));}catch(e){}}
+function weatherAlerts(){
+  if(!WX||!WX.next_7d)return [];
+  const FT=(DATA.watering&&DATA.watering.FROST_TMIN_C!=null)?DATA.watering.FROST_TMIN_C:0;
+  const out=[],days=WX.next_7d.days||[];
+  days.slice(0,3).forEach(function(x){
+    const when=fmtDate(x.date);
+    if(x.tmin_c!=null&&x.tmin_c<=WX_ALERT_CFG.hardFreeze)
+      out.push({key:'freeze:'+x.date,level:'severe',icon:'❄',title:'Hard freeze '+when,body:'Low '+Math.round(x.tmin_c)+'°C — bring in or cover tender plants and harvest what you can.'});
+    else if(x.tmin_c!=null&&x.tmin_c<=FT)
+      out.push({key:'frost:'+x.date,level:'warn',icon:'❄',title:'Frost risk '+when,body:'Low '+Math.round(x.tmin_c)+'°C — cover basil, peppers and tomatoes tonight.'});
+    if(x.tmax_c!=null&&x.tmax_c>=WX_ALERT_CFG.heat)
+      out.push({key:'heat:'+x.date,level:'warn',icon:'☀',title:'Heat spike '+when,body:'High '+Math.round(x.tmax_c)+'°C — water deeply in the morning and shade seedlings.'});
+    if(x.wind_gust_kmh!=null&&x.wind_gust_kmh>=WX_ALERT_CFG.severeWind)
+      out.push({key:'wind:'+x.date,level:'severe',icon:'🌬',title:'Damaging wind '+when,body:'Gusts to '+Math.round(x.wind_gust_kmh)+' km/h — stake tall plants, secure covers, shelter pots.'});
+    else if(x.wind_gust_kmh!=null&&x.wind_gust_kmh>=WX_ALERT_CFG.highWind)
+      out.push({key:'wind:'+x.date,level:'warn',icon:'🌬',title:'High wind '+when,body:'Gusts to '+Math.round(x.wind_gust_kmh)+' km/h — stake and secure covers.'});
+    const wc=x.wcode;
+    if(wc!=null&&wc>=95)
+      out.push({key:'storm:'+x.date,level:'severe',icon:'⛈',title:'Thunderstorm '+when,body:(wc>=96?'Hail possible — ':'')+'shelter pots and seedlings; check covers and stakes.'});
+    if(x.precip_mm!=null&&x.precip_mm>=WX_ALERT_CFG.heavyRain)
+      out.push({key:'rain:'+x.date,level:'warn',icon:'🌧',title:'Heavy rain '+when,body:Math.round(x.precip_mm)+' mm expected — skip watering; watch for waterlogging and slugs.'});
+  });
+  const seen={};return out.filter(a=>seen[a.key]?false:(seen[a.key]=true));
+}
+function setBellState(){const b=document.getElementById('alertBtn');if(b){b.innerHTML=ALERTS_ON?I.bellOn:I.bell;b.style.color=ALERTS_ON?'var(--amber)':'';}}
+function toggleAlerts(){
+  if(!ALERTS_ON){
+    if('Notification'in window&&Notification.permission!=='granted'){
+      Notification.requestPermission().then(function(){ALERTS_ON=true;persistAlerts();setBellState();runWeatherAlerts();});
+    } else {ALERTS_ON=true;persistAlerts();setBellState();runWeatherAlerts();}
+  } else {ALERTS_ON=false;persistAlerts();setBellState();}
+}
+function setupAlertUI(){
+  if(!document.getElementById('wxAlertBar')){
+    const bar=document.createElement('div');bar.id='wxAlertBar';bar.style.display='none';
+    const hdr=document.querySelector('header.masthead');
+    if(hdr&&hdr.parentNode)hdr.parentNode.insertBefore(bar,hdr.nextSibling);
+  }
+  const mr=document.querySelector('.mast-right');
+  if(mr&&!document.getElementById('alertBtn')){
+    const b=document.createElement('button');b.className='theme-btn';b.id='alertBtn';
+    b.title='Severe-weather alerts';b.setAttribute('aria-label','Toggle severe-weather alerts');
+    b.addEventListener('click',toggleAlerts);
+    mr.insertBefore(b,document.getElementById('themeBtn')||null);
+    setBellState();
+  }
+}
+function renderAlertBar(alerts){
+  const bar=document.getElementById('wxAlertBar');if(!bar)return;
+  if(!alerts.length){bar.innerHTML='';bar.style.display='none';return;}
+  bar.style.display='block';
+  const items=alerts.map(a=>'<div class="wxa '+a.level+'"><span class="wxa-i">'+a.icon+'</span><div><b>'+esc(a.title)+'</b> — '+esc(a.body)+'</div></div>').join('');
+  const hint=ALERTS_ON?'':'<button class="wxa-enable" id="wxaEnable">🔔 Get these as phone / desktop alerts</button>';
+  bar.innerHTML='<div class="wrap wxa-wrap">'+items+hint+'</div>';
+  const en=document.getElementById('wxaEnable');if(en)en.addEventListener('click',toggleAlerts);
+}
+function notifyAlerts(alerts){
+  if(!ALERTS_ON||!('Notification'in window)||Notification.permission!=='granted')return;
+  const seen=alertSeen(),fresh=alerts.filter(a=>seen.indexOf(a.key)<0);
+  fresh.slice(0,3).forEach(function(a){try{const n=new Notification('Garden Ops — '+a.title,{body:a.body,icon:'favicon-32.png',tag:a.key});n.onclick=function(){try{window.focus();}catch(e){}n.close();};}catch(e){}});
+  if(fresh.length)markSeen(fresh.map(a=>a.key));
+}
+function runWeatherAlerts(){const a=weatherAlerts();renderAlertBar(a);notifyAlerts(a);}
+
 async function boot(){
   initTheme();
   if(USERCFG.location&&!USERCFG.climate){applyDerivedClimate(USERCFG.location);if(!USERCFG.location.zone)USERCFG.location.zone=USERCFG.climate.zone;saveCfg();}
@@ -1494,7 +1577,9 @@ async function boot(){
   const app=document.getElementById('app');app.innerHTML='';app.appendChild(PANES[0][2]());app.appendChild(footer());
   window._booted=true;
   if(needsOnboarding())startWizard();
-  await fetchWeather();paintWeather();
+  setupAlertUI();
+  await fetchWeather();paintWeather();runWeatherAlerts();
+  setInterval(async function(){await fetchWeather();if(CUR===0)paintWeather();runWeatherAlerts();},1800000);
 }
 boot();
 </script>
