@@ -1,0 +1,13 @@
+# Keep private project files OUT of the public deployment.
+# Only the HTML pages, favicon assets, and /api function are published.
+data/
+scripts/
+skills/
+hardware/
+docs/
+node_modules/
+*.md
+CLAUDE.md
+README.md
+.DS_Store
+.vercel/

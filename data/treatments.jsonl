@@ -1,0 +1,2 @@
+{"_comment": "Append-only log. One JSON object per line. type: watering | fertilizer | insecticide | fungicide | other. Example below - delete:"}
+{"date": "2026-06-01", "type": "fertilizer", "zone_id": "Z1", "plant_ids": ["example-tomato-z1-01"], "product": "10-10-10 granular", "rate": "30g/m2", "method": "side-dress + water in", "notes": "EXAMPLE"}

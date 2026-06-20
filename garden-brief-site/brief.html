@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Garden Brief — Wednesday, June 17, 2026</title>
+<style>
+  :root{
+    --bg:#f4f1e8; --card:#fffdf8; --ink:#23311f; --muted:#5f6b56;
+    --line:#e2ddcd; --green:#3a7d44; --green-dk:#2f5d36;
+    --amber:#c98a1b; --red:#b4452f; --accent:#6a8f3c;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.6; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:28px 20px 64px}
+  header.hero{
+    background:linear-gradient(135deg,var(--green-dk),var(--green));
+    color:#f3f7ee;border-radius:18px;padding:26px 26px 22px;
+    box-shadow:0 8px 28px rgba(47,93,54,.18);
+  }
+  .hero .eyebrow{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;opacity:.8;margin:0 0 6px}
+  .hero h1{margin:0;font-size:1.7rem;font-weight:700;letter-spacing:-.01em}
+  .hero .loc{margin:8px 0 0;opacity:.9;font-size:.95rem}
+  .note{
+    background:#fbf6e7;border:1px solid #ecdfb8;border-radius:12px;
+    padding:12px 15px;margin:18px 0;font-size:.86rem;color:#7a6a3c
+  }
+  section.card{
+    background:var(--card);border:1px solid var(--line);border-radius:16px;
+    padding:18px 20px;margin:16px 0;box-shadow:0 2px 10px rgba(35,49,31,.04)
+  }
+  h2{font-size:1.12rem;margin:.1em 0 .55em;display:flex;align-items:center;gap:.5rem}
+  h2 .ico{font-size:1.15rem}
+  ul{margin:.2em 0;padding-left:1.25em}
+  li{margin:.42em 0}
+  .lead li{margin:.55em 0}
+  .pill{display:inline-block;font-size:.72rem;font-weight:700;border-radius:999px;
+    padding:2px 9px;vertical-align:middle;margin-right:.45rem;letter-spacing:.02em}
+  .skip{background:#e7f0e3;color:var(--green-dk)}
+  .light{background:#faf0d6;color:var(--amber)}
+  .now{background:#f6ddd5;color:var(--red)}
+  .zone{font-weight:600}
+  .meta{color:var(--muted);font-size:.9rem}
+  .wx-grid{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+  .wx{flex:1 1 120px;background:#f1f4ec;border-radius:12px;padding:10px 12px;text-align:center}
+  .wx .v{font-size:1.25rem;font-weight:700;color:var(--green-dk)}
+  .wx .k{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+  strong{color:var(--green-dk)}
+  .hold{color:var(--muted)}
+  footer{margin-top:26px;font-size:.8rem;color:var(--muted);text-align:center}
+  footer a{color:var(--accent)}
+  a{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <p class="eyebrow">Daily Garden Brief</p>
+    <h1>Wednesday, June 17, 2026</h1>
+    <p class="loc">Kaleb's Home Garden · Edmonton, AB · Zone 4a</p>
+  </header>
+
+  <div class="note">
+    ⚠️ The live weather API was unreachable when this brief ran, so watering numbers use today's Environment Canada forecast plus June Edmonton norms. Directionally solid — treat the millimetres as estimates.
+  </div>
+
+  <section class="card">
+    <h2><span class="ico">✅</span> Do today</h2>
+    <ul class="lead">
+      <li><strong>Skip watering the in-ground beds</strong> — 22&nbsp;mm of rain last week plus rain today covers them. Two exceptions below.</li>
+      <li><strong>Finger-check the P1 pots</strong> (figs, blueberry, grape) tonight. Today's shower won't reliably soak potting mix — if the top 3&nbsp;cm is dry, water until it runs from the drainage holes. Use rainwater on the blueberry if you have it (tap water slowly pushes its pH the wrong way).</li>
+      <li><strong>Scout the potatoes (B4) for Colorado potato beetle</strong> — adults and orange egg masses under the leaves. Hand-pick daily; it's peak window (Jun–Jul) and the canopy is full.</li>
+      <li><strong>Hoe the weed flush in B6</strong> (and patches of B3/B5) while it's still small — your June&nbsp;12 note flagged this as a compost weed flush, not a crop.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2><span class="ico">🌤️</span> Weather</h2>
+    <p class="meta">9–17&nbsp;°C · morning rain ending near noon, then sun/cloud with a 60% chance of showers · no frost this week (lows hold 8–12&nbsp;°C) · gusts only ~35&nbsp;km/h.</p>
+    <div class="wx-grid">
+      <div class="wx"><div class="v">9–17°C</div><div class="k">Today</div></div>
+      <div class="wx"><div class="v">~5 mm</div><div class="k">Rain today</div></div>
+      <div class="wx"><div class="v">22 mm</div><div class="k">Past week</div></div>
+      <div class="wx"><div class="v">None</div><div class="k">Frost risk</div></div>
+    </div>
+    <p class="meta" style="margin-top:12px">No hail/wind alert today, but hail season is open — keep the "pots under cover" move ready if a severe-thunderstorm watch pops.</p>
+  </section>
+
+  <section class="card">
+    <h2><span class="ico">💧</span> Watering — per zone</h2>
+    <ul>
+      <li><span class="pill skip">SKIP</span><span class="zone">B1</span> fruit bed, <span class="zone">B2</span> peppers, <span class="zone">B4</span> potatoes, <span class="zone">B5</span> hoop tunnel, <span class="zone">B6</span> seedlings — soil moisture is fine.</li>
+      <li><span class="pill light">LIGHT</span><span class="zone">B3</span> tomato/basil/squash — mainly for the thirsty squash. Rain likely covers it; if dry by Thursday, water at the soil line (not the leaves — powdery mildew).</li>
+      <li><span class="pill light">LIGHT</span><span class="zone">P1</span> pots — see finger-check above. Pots are the one place not to trust a passing shower.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2><span class="ico">🌱</span> Feeding</h2>
+    <p class="meta">The treatment log is still empty, so nothing's been recorded yet — these are genuinely due, with the plants that should <em>not</em> be fed now cut out.</p>
+    <ul>
+      <li><strong>Brambles (B1 blackberry, boysenberry):</strong> light mid-June feed due — balanced 10-10-10. For the boysenberry, pair with chelated iron rather than just NPK if the June&nbsp;12 leaf yellowing is interveinal (yellow blade, green veins) — that's alkaline-soil chlorosis, not hunger. Same watch on the cherry's pale leaves.</li>
+      <li><strong>Potatoes (B4):</strong> feed low-N <strong>5-10-10</strong> when you do the first hilling (do that now — mound 10–15&nbsp;cm around the stems). High N = leaves, not spuds.</li>
+      <li><strong>Tomatoes &amp; peppers (B3, B2):</strong> light balanced feed. Go gentle on the recovering Supremo — feed lightly after pruning its dead tops back to a healthy node.</li>
+      <li><strong>Fig (P1) and kale (B5):</strong> due — fig gets half-strength balanced liquid; kale likes nitrogen.</li>
+      <li class="hold"><strong>Hold:</strong> garlic (bulbing — N makes small bulbs), cherry (no feed in year one), chives, and the two unidentified plants until ID'd. Blueberry needs <em>acid-specific</em> fertilizer only — don't hit it with general 10-10-10.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2><span class="ico">🐛</span> Scout for — IPM-first, nothing sighted yet</h2>
+    <p class="meta">Colorado potato beetle (potatoes — hand-pick), cabbage moth/worm on kale (BTK if you see caterpillars — safe right up to harvest), sawfly on the brambles (hand-pick/soap), aphids on tomatoes/peppers (water blast first). All edibles are weeks from harvest, so no pre-harvest-interval concerns yet — and if anything ever needs spraying, do it at dusk and never on open blooms to protect pollinators.</p>
+  </section>
+
+  <section class="card">
+    <h2><span class="ico">📌</span> Still on the list from June 12</h2>
+    <ul>
+      <li>Prune the dead Supremo tops back to green wood.</li>
+      <li>Re-stake the snapped pepper in B2.</li>
+      <li>Firm soil over the exposed roots on the B3 resprouts.</li>
+    </ul>
+  </section>
+
+  <footer>
+    Generated by Garden Ops · Sources:
+    <a href="https://weather.gc.ca/en/location/index.html?coords=53.536%2C-113.494">Environment Canada — Edmonton 7-day</a> ·
+    <a href="https://www.thecanadaweather.com/canada/alberta/weather-edmonton/">The Canada Weather — Edmonton</a>
+  </footer>
+
+</div>
+</body>
+</html>

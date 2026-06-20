@@ -1,0 +1,741 @@
+{
+  "_comment": "Plant registry - compiled from photo survey 2026-06-12. TBD fields flagged in notes.",
+  "plants": [
+    {
+      "plant_id": "fig-olympian-p1-01",
+      "common_name": "Fig 'Olympian'",
+      "species": "Ficus carica",
+      "cultivar": "Olympian",
+      "zone_id": "P1",
+      "type": "tropical_potted",
+      "quantity": 3,
+      "planted_date": "2026-06-01",
+      "photo": "photos/fig-olympian-p1-01.jpg",
+      "hardiness": "zone 6 (tender here)",
+      "sun": "full_sun",
+      "water": {
+        "weekly_mm": 40,
+        "drought_tolerant": false,
+        "notes": "Potted: check by finger daily in July; water until it runs from drainage holes. Drought-stressed figs drop fruit."
+      },
+      "fertilizer": {
+        "npk_preference": "balanced 10-10-10 liquid half-strength",
+        "interval_days": 21,
+        "season": "May-Jul; stop by Aug 1 to harden wood"
+      },
+      "pests": [
+        {
+          "pest": "spider mites (esp. after indoor storage)",
+          "watch_window": "May-Jun",
+          "ipm_first": "hose-blast undersides, insecticidal soap",
+          "chemical_option": "horticultural oil"
+        }
+      ],
+      "frost_tolerance_c": -2,
+      "overwinter": {
+        "strategy": "bring_indoors",
+        "trigger": "after leaf drop / first light frosts (late Sept-Oct)",
+        "instructions": "Let a light frost trigger dormancy and leaf drop, then move pots to garage at 0-7C. Water ~monthly (barely moist). Out again early May, acclimate 7-10 days. Olympian fruits on new wood, so spring pruning is fine."
+      },
+      "notes": "NEVER plant in ground in Edmonton. Up-pot yearly until ~60L."
+    },
+    {
+      "plant_id": "blueberry-p1-01",
+      "common_name": "Blueberry (variety TBD)",
+      "species": "Vaccinium corymbosum",
+      "cultivar": "TBD - check tag",
+      "zone_id": "P1",
+      "type": "shrub",
+      "quantity": 1,
+      "planted_date": "2026-06-01",
+      "photo": "photos/blueberry-p1-01.jpg",
+      "hardiness": "varies; treat as zone 4 marginal",
+      "sun": "full_sun",
+      "water": {
+        "weekly_mm": 35,
+        "drought_tolerant": false,
+        "notes": "Shallow-rooted; keep evenly moist. Rainwater preferred - Edmonton tap water is alkaline and slowly raises pH."
+      },
+      "fertilizer": {
+        "npk_preference": "ACID fertilizer only (rhododendron/azalea type) + sulphur amendment; pH must stay 4.5-5.5",
+        "interval_days": 42,
+        "season": "May-Jul"
+      },
+      "pests": [
+        {
+          "pest": "birds at fruit set",
+          "watch_window": "Jul-Aug",
+          "ipm_first": "netting",
+          "chemical_option": "none"
+        }
+      ],
+      "frost_tolerance_c": null,
+      "overwinter": {
+        "strategy": "bring_indoors",
+        "trigger": "late Oct after dormancy",
+        "instructions": "Potted roots are ~2 zones less hardy than the tag. Overwinter the pot in an unheated garage or buried/heavily mulched against the house. Needs winter chill - do NOT keep warm."
+      },
+      "notes": "CRITICAL: keep potted in acidic peat-based mix forever. Edmonton soil pH 7.5-8 will kill it in-ground. Iron chlorosis (yellow leaf, green veins) = pH creeping up -> add sulphur/chelated iron."
+    },
+    {
+      "plant_id": "grape-p1-01",
+      "common_name": "Grape vine (variety TBD)",
+      "species": "Vitis sp.",
+      "cultivar": "TBD - check tag",
+      "zone_id": "P1",
+      "type": "perennial",
+      "quantity": 1,
+      "planted_date": "2026-06-01",
+      "photo": "photos/grape-p1-01.jpg",
+      "hardiness": "TBD: Valiant/Frontenac=zone 3 OK; table grapes=tender",
+      "sun": "full_sun",
+      "water": {
+        "weekly_mm": 30,
+        "drought_tolerant": true,
+        "notes": "Potted for now - water when top 3cm dry"
+      },
+      "fertilizer": {
+        "npk_preference": "light balanced feed; overfeeding = vine, no fruit",
+        "interval_days": 30,
+        "season": "May-Jul"
+      },
+      "pests": [
+        {
+          "pest": "powdery mildew",
+          "watch_window": "Jul-Aug",
+          "ipm_first": "airflow, avoid wetting foliage",
+          "chemical_option": "sulphur spray"
+        }
+      ],
+      "frost_tolerance_c": null,
+      "overwinter": {
+        "strategy": "bring_indoors",
+        "trigger": "after leaf drop, late Oct",
+        "instructions": "Until variety is known, treat as tender: dormant pot into garage like the figs. If tag says Valiant/Beta/Frontenac it can be planted out next spring and cane-buried instead."
+      },
+      "notes": "ID the variety - it decides whether this stays potted or goes in-ground."
+    },
+    {
+      "plant_id": "cherry-b1-01",
+      "common_name": "Cherry tree (variety TBD)",
+      "species": "Prunus sp.",
+      "cultivar": "TBD - check tag",
+      "zone_id": "B1",
+      "type": "tree",
+      "quantity": 1,
+      "planted_date": "2026-06-01",
+      "photo": "photos/cherry-b1-01.jpg",
+      "hardiness": "TBD: Evans/Romance series=zone 3 OK; sweet cherry=zone 5 (trouble)",
+      "sun": "full_sun",
+      "water": {
+        "weekly_mm": 25,
+        "drought_tolerant": false,
+        "notes": "Deep weekly soak first season to establish"
+      },
+      "fertilizer": {
+        "npk_preference": "none first year; then light balanced spring feed",
+        "interval_days": 365,
+        "season": "May only"
+      },
+      "pests": [
+        {
+          "pest": "black knot (fungal)",
+          "watch_window": "inspect year-round",
+          "ipm_first": "prune 15-20cm below any black galls in winter; burn prunings",
+          "chemical_option": "none effective"
+        },
+        {
+          "pest": "birds",
+          "watch_window": "Jul",
+          "ipm_first": "netting",
+          "chemical_option": "none"
+        }
+      ],
+      "frost_tolerance_c": null,
+      "overwinter": {
+        "strategy": "mulch_protect",
+        "trigger": "after ground freeze (early Nov)",
+        "instructions": "Deep water late Oct before freeze-up. Mulch root zone AFTER ground freezes. Rodent guard on trunk. If it turns out to be a sweet cherry, add burlap wrap and expect dieback - consider replacing with Evans or Romance-series sour cherry."
+      },
+      "notes": "VARIETY IS THE BIG QUESTION - sweet cherries rarely survive Edmonton winters in the open."
+    },
+    {
+      "plant_id": "blackberry-b1-01",
+      "common_name": "Blackberry",
+      "species": "Rubus fruticosus agg.",
+      "cultivar": "TBD",
+      "zone_id": "B1",
+      "type": "shrub",
+      "quantity": 1,
+      "planted_date": "2026-06-01",
+      "photo": "photos/blackberry-b1-01.jpg",
+      "hardiness": "zone 5 (marginal)",
+      "sun": "full_sun",
+      "water": {
+        "weekly_mm": 30,
+        "drought_tolerant": false,
+        "notes": "Consistent moisture during fruiting"
+      },
+      "fertilizer": {
+        "npk_preference": "balanced 10-10-10 spring + light mid-June",
+        "interval_days": 45,
+        "season": "May-Jul 31 HARD STOP"
+      },
+      "pests": [
+        {
+          "pest": "sawfly larvae",
+          "watch_window": "Jun",
+          "ipm_first": "hand-pick, soap spray",
+          "chemical_option": "pyrethrin"
+        }
+      ],
+      "frost_tolerance_c": null,
+      "overwinter": {
+        "strategy": "mulch_protect",
+        "trigger": "late Oct, after a few hard frosts",
+        "instructions": "Bend canes to the ground, pin, bury under 15-20cm leaves/mulch (snow on top is ideal). Uncover mid-April. Floricane types fruit on last year's canes - canes that winter-kill = no fruit, so burial diligence directly equals harvest."
+      },
+      "notes": ""
+    },
+    {
+      "plant_id": "boysenberry-b1-01",
+      "common_name": "Boysenberry",
+      "species": "Rubus ursinus x idaeus",
+      "cultivar": "Boysenberry",
+      "zone_id": "B1",
+      "type": "shrub",
+      "quantity": 1,
+      "planted_date": "2026-06-01",
+      "photo": "photos/boysenberry-b1-01.jpg",
+      "hardiness": "zone 5-6 (most tender bramble)",
+      "sun": "full_sun",
+      "water": {
+        "weekly_mm": 30,
+        "drought_tolerant": false,
+        "notes": ""
+      },
+      "fertilizer": {
+        "npk_preference": "balanced 10-10-10 spring",
+        "interval_days": 45,
+        "season": "May-Jul 31 HARD STOP"
+      },
+      "pests": [
+        {
+          "pest": "sawfly larvae",
+          "watch_window": "Jun",
+          "ipm_first": "hand-pick, soap spray",
+          "chemical_option": "pyrethrin"
+        }
+      ],
+      "frost_tolerance_c": null,
+      "overwinter": {
+        "strategy": "mulch_protect",
+        "trigger": "late Oct",
+        "instructions": "Same cane-burial as blackberry but MORE critical - boysenberry canes die at about -20C exposed. Bury completely; consider extra straw layer."
+      },
+      "notes": "Yellowing leaves in photo - watch; could be transplant stress or early chlorosis (alkaline soil). If veins stay green while leaf yellows, treat with chelated iron."
+    },
+    {
+      "plant_id": "strawberry-b1-01",
+      "common_name": "Strawberry",
+      "species": "Fragaria x ananassa",
+      "cultivar": "TBD (June-bearing vs everbearing changes feeding)",
+      "zone_id": "B1",
+      "type": "perennial",
+      "quantity": 4,
+      "planted_date": "2026-05-20",
+      "photo": "photos/strawberry-b1-01.jpg",
+      "hardiness": "zone 3 hardy",
+      "sun": "full_sun",
+      "water": {
+        "weekly_mm": 25,
+        "drought_tolerant": false,
+        "notes": "Shallow roots; steady moisture during fruiting"
+      },
+      "fertilizer": {
+        "npk_preference": "balanced after harvest (June-bearing) or light monthly (everbearing)",
+        "interval_days": 30,
+        "season": "May-Aug"
+      },
+      "pests": [
+        {
+          "pest": "slugs at fruit",
+          "watch_window": "wet spells Jun-Aug",
+          "ipm_first": "beer traps, diatomaceous earth",
+          "chemical_option": "iron phosphate bait"
+        },
+        {
+          "pest": "birds",
+          "watch_window": "Jul",
+          "ipm_first": "netting",
+          "chemical_option": "none"
+        }
+      ],
+      "frost_tolerance_c": null,
+      "overwinter": {
+        "strategy": "mulch_protect",
+        "trigger": "after ground freeze (early Nov)",
+        "instructions": "5-10cm clean straw over crowns after freeze-up; pull back in April. Pinch runners to keep energy in fruiting crowns."
+      },
+      "notes": ""
+    },
+    {
+      "plant_id": "pepper-b2-01",
+      "common_name": "Pepper (variety TBD)",
+      "species": "Capsicum annuum",
+      "cultivar": "TBD - check tags",
+      "zone_id": "B2",
+      "type": "vegetable",
+      "quantity": 3,
+      "planted_date": "2026-05-25",
+      "photo": "photos/pepper-b2-01.jpg",
+      "hardiness": "tender",
+      "sun": "full_sun",
+      "water": {
+        "weekly_mm": 30,
+        "drought_tolerant": false,
+        "notes": "Even moisture; peppers sulk below 12C nights - in cool stretches they just pause, don't overwater"
+      },
+      "fertilizer": {
+        "npk_preference": "balanced at establishment; 5-10-10 at first flower; Ca helps prevent BER",
+        "interval_days": 21,
+        "season": "Jun-Aug"
+      },
+      "pests": [
+        {
+          "pest": "aphids",
+          "watch_window": "Jun-Aug",
+          "ipm_first": "water blast, insecticidal soap",
+          "chemical_option": "rarely needed"
+        },
+        {
+          "pest": "flea beetles",
+          "watch_window": "May-Jun",
+          "ipm_first": "row cover while young",
+          "chemical_option": "pyrethrin if severe"
+        }
+      ],
+      "frost_tolerance_c": 2,
+      "overwinter": {
+        "strategy": "annual_dies",
+        "trigger": "first frost forecast",
+        "instructions": "Harvest everything before any frost - peppers are damaged even at +2C. Plant 1 (north end) took stem damage; it may recover from side shoots."
+      },
+      "notes": "Plant nearest fence has a snapped/stripped stake and sparse top - re-stake and let side shoots take over."
+    },
+    {
+      "plant_id": "tomato-supremo-b3-01",
+      "common_name": "Tomato 'Supremo' (Roma)",
+      "species": "Solanum lycopersicum",
+      "cultivar": "Supremo",
+      "zone_id": "B3",
+      "type": "vegetable",
+      "quantity": 3,
+      "planted_date": "2026-05-20",
+      "photo": "photos/tomato-supremo-b3-01.jpg",
+      "hardiness": "tender",
+      "sun": "full_sun",
+      "water": {
+        "weekly_mm": 35,
+        "drought_tolerant": false,
+        "notes": "Deep + consistent; Romas are blossom-end-rot prone with uneven water"
+      },
+      "fertilizer": {
+        "npk_preference": "balanced now while recovering; 5-10-10 at fruit set",
+        "interval_days": 21,
+        "season": "May-Aug"
+      },
+      "pests": [
+        {
+          "pest": "aphids",
+          "watch_window": "Jun-Aug",
+          "ipm_first": "water blast, soap",
+          "chemical_option": "rarely needed"
+        }
+      ],
+      "frost_tolerance_c": 0,
+      "overwinter": {
+        "strategy": "annual_dies",
+        "trigger": "first frost",
+        "instructions": "Harvest all incl. green fruit before first fall frost; ripen indoors"
+      },
+      "notes": "DAMAGED: tops dried/collapsed (cold-night transplant shock or frost nip ~late May). Green regrowth visible low on stems - keep, prune dead tops to a healthy node, feed lightly. One plant may be a full loss."
+    },
+    {
+      "plant_id": "tomato-b3-02",
+      "common_name": "Tomato (healthy, variety TBD)",
+      "species": "Solanum lycopersicum",
+      "cultivar": "TBD - red tag",
+      "zone_id": "B3",
+      "type": "vegetable",
+      "quantity": 2,
+      "planted_date": "2026-05-20",
+      "photo": "photos/tomato-b3-02.jpg",
+      "hardiness": "tender",
+      "sun": "full_sun",
+      "water": {
+        "weekly_mm": 35,
+        "drought_tolerant": false,
+        "notes": ""
+      },
+      "fertilizer": {
+        "npk_preference": "balanced; 5-10-10 at fruit set",
+        "interval_days": 21,
+        "season": "May-Aug"
+      },
+      "pests": [
+        {
+          "pest": "aphids",
+          "watch_window": "Jun-Aug",
+          "ipm_first": "water blast, soap",
+          "chemical_option": "rarely needed"
+        }
+      ],
+      "frost_tolerance_c": 0,
+      "overwinter": {
+        "strategy": "annual_dies",
+        "trigger": "first frost",
+        "instructions": "Harvest all before first frost"
+      },
+      "notes": "Vigorous dark-green plants with basil companions - these are fine. Stake/cage soon."
+    },
+    {
+      "plant_id": "basil-b3-01",
+      "common_name": "Basil (Genovese)",
+      "species": "Ocimum basilicum",
+      "cultivar": "Genovese",
+      "zone_id": "B3",
+      "type": "herb",
+      "quantity": 4,
+      "planted_date": "2026-05-25",
+      "photo": "photos/basil-b3-01.jpg",
+      "hardiness": "very tender",
+      "sun": "full_sun",
+      "water": {
+        "weekly_mm": 30,
+        "drought_tolerant": false,
+        "notes": "Likes moisture but not wet feet"
+      },
+      "fertilizer": {
+        "npk_preference": "light balanced; heavy N dulls flavour",
+        "interval_days": 30,
+        "season": "Jun-Aug"
+      },
+      "pests": [
+        {
+          "pest": "slugs",
+          "watch_window": "wet spells",
+          "ipm_first": "beer traps, DE",
+          "chemical_option": "iron phosphate"
+        }
+      ],
+      "frost_tolerance_c": 4,
+      "overwinter": {
+        "strategy": "annual_dies",
+        "trigger": "nights below 7-8C (early Sept)",
+        "instructions": "Most frost-tender plant in the garden - damaged below ~4C, sulks below 10C. Headline of every frost alert. Harvest hard or pot one up and bring inside in early Sept. Pinch flower buds all season to keep leaves coming."
+      },
+      "notes": ""
+    },
+    {
+      "plant_id": "squash-b3-01",
+      "common_name": "Squash/Zucchini (type TBD)",
+      "species": "Cucurbita pepo",
+      "cultivar": "TBD",
+      "zone_id": "B3",
+      "type": "vegetable",
+      "quantity": 1,
+      "planted_date": "2026-05-25",
+      "photo": "photos/squash-b3-01.jpg",
+      "hardiness": "tender",
+      "sun": "full_sun",
+      "water": {
+        "weekly_mm": 40,
+        "drought_tolerant": false,
+        "notes": "Heavy drinker; water soil not leaves (powdery mildew)"
+      },
+      "fertilizer": {
+        "npk_preference": "balanced at establishment; 5-10-10 at flowering",
+        "interval_days": 21,
+        "season": "Jun-Aug"
+      },
+      "pests": [
+        {
+          "pest": "powdery mildew",
+          "watch_window": "Jul-Aug",
+          "ipm_first": "morning watering at soil line, remove worst leaves",
+          "chemical_option": "sulphur/potassium bicarbonate"
+        }
+      ],
+      "frost_tolerance_c": 0,
+      "overwinter": {
+        "strategy": "annual_dies",
+        "trigger": "first frost",
+        "instructions": "Harvest before frost"
+      },
+      "notes": "Vine has a dried collapsed section mid-stem - watch the growing tip; if tip stays healthy it will outgrow it."
+    },
+    {
+      "plant_id": "chives-b3-01",
+      "common_name": "Chives",
+      "species": "Allium schoenoprasum",
+      "cultivar": "",
+      "zone_id": "B3",
+      "type": "perennial",
+      "quantity": 1,
+      "planted_date": "2025-06-01",
+      "photo": "photos/chives-b3-01.jpg",
+      "hardiness": "zone 3 bulletproof",
+      "sun": "full_sun",
+      "water": {
+        "weekly_mm": 20,
+        "drought_tolerant": true,
+        "notes": ""
+      },
+      "fertilizer": {
+        "npk_preference": "none needed; compost topdress",
+        "interval_days": 365,
+        "season": "spring"
+      },
+      "pests": [],
+      "frost_tolerance_c": null,
+      "overwinter": {
+        "strategy": "hardy_leave",
+        "trigger": "n/a",
+        "instructions": "Nothing needed. Shear after flowering for fresh regrowth."
+      },
+      "notes": ""
+    },
+    {
+      "plant_id": "potato-b4-01",
+      "common_name": "Potatoes",
+      "species": "Solanum tuberosum",
+      "cultivar": "TBD",
+      "zone_id": "B4",
+      "type": "vegetable",
+      "quantity": 12,
+      "planted_date": "2026-05-10",
+      "photo": "photos/potato-b4-01.jpg",
+      "hardiness": "tops tender, tubers fine",
+      "sun": "full_sun",
+      "water": {
+        "weekly_mm": 30,
+        "drought_tolerant": false,
+        "notes": "CRITICAL window = flowering (tuber set): never let them dry out then. Even water prevents knobby/hollow tubers."
+      },
+      "fertilizer": {
+        "npk_preference": "low N, higher P-K (e.g. 5-10-10); too much N = all leaves no spuds",
+        "interval_days": 30,
+        "season": "Jun-Jul"
+      },
+      "pests": [
+        {
+          "pest": "Colorado potato beetle",
+          "watch_window": "Jun-Jul",
+          "ipm_first": "hand-pick adults + orange egg masses under leaves DAILY",
+          "chemical_option": "spinosad if overwhelmed"
+        },
+        {
+          "pest": "flea beetles",
+          "watch_window": "Jun",
+          "ipm_first": "tolerate minor shothole damage",
+          "chemical_option": "none usually"
+        }
+      ],
+      "frost_tolerance_c": 0,
+      "overwinter": {
+        "strategy": "annual_dies",
+        "trigger": "harvest Sept",
+        "instructions": "Harvest 2 wks after tops die back; cure dark 10-14 days. Light frost on tops in Sept is fine - tubers are safe underground."
+      },
+      "notes": "Healthiest bed in the garden. HILL NOW: mound 10-15cm soil/straw around stems, repeat in 3 wks - more buried stem = more potatoes + no green (solanine) tubers."
+    },
+    {
+      "plant_id": "kale-b5-01",
+      "common_name": "Curly kale",
+      "species": "Brassica oleracea var. sabellica",
+      "cultivar": "TBD",
+      "zone_id": "B5",
+      "type": "vegetable",
+      "quantity": 8,
+      "planted_date": "2026-05-10",
+      "photo": "photos/kale-b5-01.jpg",
+      "hardiness": "frost-hardy to -6C+",
+      "sun": "full_sun",
+      "water": {
+        "weekly_mm": 25,
+        "drought_tolerant": false,
+        "notes": ""
+      },
+      "fertilizer": {
+        "npk_preference": "N-loving: balanced or higher-N monthly",
+        "interval_days": 30,
+        "season": "May-Sep"
+      },
+      "pests": [
+        {
+          "pest": "cabbage moth/worm",
+          "watch_window": "Jun-Aug",
+          "ipm_first": "BTK spray, row cover",
+          "chemical_option": "BTK is the answer"
+        },
+        {
+          "pest": "flea beetles",
+          "watch_window": "May-Jun",
+          "ipm_first": "row cover",
+          "chemical_option": "none usually"
+        },
+        {
+          "pest": "aphids (grey cabbage aphid)",
+          "watch_window": "Jul-Sep",
+          "ipm_first": "water blast colonies early",
+          "chemical_option": "insecticidal soap"
+        }
+      ],
+      "frost_tolerance_c": null,
+      "overwinter": {
+        "strategy": "hardy_leave",
+        "trigger": "n/a",
+        "instructions": "Frost makes it SWEETER. Under the hoop tunnel, harvest into November. Done when buried in snow."
+      },
+      "notes": ""
+    },
+    {
+      "plant_id": "garlic-b5-01",
+      "common_name": "Garlic",
+      "species": "Allium sativum",
+      "cultivar": "hardneck (assumed)",
+      "zone_id": "B5",
+      "type": "vegetable",
+      "quantity": 15,
+      "planted_date": "2025-10-01",
+      "photo": "photos/garlic-b5-01.jpg",
+      "hardiness": "zone 3 (fall-planted)",
+      "sun": "full_sun",
+      "water": {
+        "weekly_mm": 25,
+        "drought_tolerant": false,
+        "notes": "STOP watering ~2 weeks before harvest (mid-July) so bulbs cure in ground"
+      },
+      "fertilizer": {
+        "npk_preference": "done feeding - bulbing now; high N now = small bulbs",
+        "interval_days": 999,
+        "season": "early spring only"
+      },
+      "pests": [],
+      "frost_tolerance_c": null,
+      "overwinter": {
+        "strategy": "hardy_leave",
+        "trigger": "replant cloves Oct 1-15",
+        "instructions": "Harvest mid-late July when 3-4 lower leaves brown. Cure 2-3 wks. Save biggest bulbs for Oct replanting."
+      },
+      "notes": "SCAPES ~late June: snap them off (eat them - garlic scape pesto) so energy goes to the bulb."
+    },
+    {
+      "plant_id": "salad-b5-01",
+      "common_name": "Salad mix (arugula, beet/chard, cilantro, lettuce)",
+      "species": "mixed",
+      "cultivar": "",
+      "zone_id": "B5",
+      "type": "vegetable",
+      "quantity": 1,
+      "planted_date": "2026-05-15",
+      "photo": "photos/salad-b5-01.jpg",
+      "hardiness": "cool-season, frost-tolerant",
+      "sun": "part_sun",
+      "water": {
+        "weekly_mm": 25,
+        "drought_tolerant": false,
+        "notes": "Shallow roots - light frequent beats deep infrequent for greens"
+      },
+      "fertilizer": {
+        "npk_preference": "light N after each cutting",
+        "interval_days": 21,
+        "season": "May-Sep"
+      },
+      "pests": [
+        {
+          "pest": "flea beetles (arugula shothole)",
+          "watch_window": "May-Jun",
+          "ipm_first": "tolerate or row cover",
+          "chemical_option": "none"
+        },
+        {
+          "pest": "slugs",
+          "watch_window": "wet spells",
+          "ipm_first": "beer traps, DE",
+          "chemical_option": "iron phosphate"
+        }
+      ],
+      "frost_tolerance_c": -4,
+      "overwinter": {
+        "strategy": "annual_dies",
+        "trigger": "hard freeze Oct-Nov",
+        "instructions": "Under hoop, cut-and-come-again into late fall. Arugula/cilantro bolt in July heat - succession sow every 3 wks."
+      },
+      "notes": ""
+    },
+    {
+      "plant_id": "unknown-woody-b3-01",
+      "common_name": "UNIDENTIFIED woody resprouts (goji? haskap?)",
+      "species": "TBD",
+      "cultivar": "TBD",
+      "zone_id": "B3",
+      "type": "shrub",
+      "quantity": 2,
+      "planted_date": "2026-05-01",
+      "photo": "photos/unknown-woody-b3-01.jpg",
+      "hardiness": "TBD",
+      "sun": "full_sun",
+      "water": {
+        "weekly_mm": 25,
+        "drought_tolerant": true,
+        "notes": ""
+      },
+      "fertilizer": {
+        "npk_preference": "none until ID'd and recovered",
+        "interval_days": 999,
+        "season": ""
+      },
+      "pests": [],
+      "frost_tolerance_c": null,
+      "overwinter": {
+        "strategy": "hardy_leave",
+        "trigger": "TBD",
+        "instructions": "Both goji (z3) and haskap (z2) are bombproof here - if it's either, no protection needed."
+      },
+      "notes": "Woody stems, dead tops, vigorous chartreuse regrowth from base = winter dieback recovery. Prune dead tops to live wood. ID NEEDED: send a leaf close-up when growth fills in, or find the tag."
+    },
+    {
+      "plant_id": "seedlings-b6-01",
+      "common_name": "UNIDENTIFIED dense seedling carpet",
+      "species": "TBD",
+      "cultivar": "",
+      "zone_id": "B6",
+      "type": "vegetable",
+      "quantity": 1,
+      "planted_date": "2026-05-25",
+      "photo": "photos/seedlings-b6-01.jpg",
+      "hardiness": "",
+      "sun": "full_sun",
+      "water": {
+        "weekly_mm": 20,
+        "drought_tolerant": false,
+        "notes": ""
+      },
+      "fertilizer": {
+        "npk_preference": "none until ID'd",
+        "interval_days": 999,
+        "season": ""
+      },
+      "pests": [],
+      "frost_tolerance_c": null,
+      "overwinter": {
+        "strategy": "annual_dies",
+        "trigger": "",
+        "instructions": ""
+      },
+      "notes": "ACTION NEEDED: if you broadcast-sowed greens here, thin to ~5cm. If you sowed nothing, this is a weed flush (willowherb-like) - hoe it this week before it sets in."
+    }
+  ]
+}

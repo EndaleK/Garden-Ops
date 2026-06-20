@@ -1,0 +1,12 @@
+{
+  "_comment": "Zones from photo survey 2026-06-12. Rename/adjust areas to match reality. moisture_source flips to 'sensor:<id>' when hardware lands.",
+  "zones": [
+    { "zone_id": "B1", "name": "Teal fruit bed (brambles, cherry, strawberries)", "sun_exposure": "full_sun", "soil_type": "loam", "area_m2": 4, "irrigation": "manual_hose", "moisture_source": "weather_model", "sensor_id": null, "notes": "Teal-stained raised bed along fence" },
+    { "zone_id": "B2", "name": "Pepper bed (natural wood, poly sheet beside)", "sun_exposure": "full_sun", "soil_type": "loam", "area_m2": 3, "irrigation": "manual_hose", "moisture_source": "weather_model", "sensor_id": null, "notes": "" },
+    { "zone_id": "B3", "name": "Tomato + basil + squash bed", "sun_exposure": "full_sun", "soil_type": "loam", "area_m2": 5, "irrigation": "drip_partial", "moisture_source": "weather_model", "sensor_id": null, "notes": "Has chives clump; heavy volunteer/weed pressure; drip line visible in part" },
+    { "zone_id": "B4", "name": "Potato bed (grey wood)", "sun_exposure": "full_sun", "soil_type": "loam", "area_m2": 4, "irrigation": "drip", "moisture_source": "weather_model", "sensor_id": null, "notes": "Healthiest bed; drip line top corner" },
+    { "zone_id": "B5", "name": "Hoop tunnel bed (kale, garlic, salad greens)", "sun_exposure": "full_sun", "soil_type": "loam", "area_m2": 5, "irrigation": "drip", "moisture_source": "weather_model", "sensor_id": null, "notes": "Poly hoop = season extension into Nov; drip lines present" },
+    { "zone_id": "B6", "name": "Dense seedling bed (ID pending)", "sun_exposure": "full_sun", "soil_type": "loam", "area_m2": 4, "irrigation": "manual_hose", "moisture_source": "weather_model", "sensor_id": null, "notes": "Wall-to-wall seedlings; crop vs weed unresolved" },
+    { "zone_id": "P1", "name": "Pot cluster (figs, blueberry, grape)", "sun_exposure": "full_sun", "soil_type": "potting_mix", "area_m2": 2, "irrigation": "manual_hose", "moisture_source": "weather_model", "sensor_id": null, "notes": "Pots dry FAST - near-daily water in July heat. First sensor should go here." }
+  ]
+}

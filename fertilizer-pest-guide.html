@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="day">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1f4d33">
+<title>Fertilizer &amp; Pest Guide — Garden Ops</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="alternate icon" href="favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Schibsted+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root{
+    --font-display:'Fraunces','Iowan Old Style','Palatino Linotype',Georgia,serif;
+    --font-ui:'Schibsted Grotesk',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+    --font-mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+    --r:16px; --r-sm:11px;
+    --ease:cubic-bezier(.33,1,.68,1); --spring:cubic-bezier(.34,1.4,.64,1);
+  }
+  html[data-theme="day"]{
+    --paper:#f3eee2; --paper2:#ece4d3;
+    --surface:#fffdf7; --surface2:#f6f0e3; --inset:#efe7d6;
+    --line:#e3dac6; --line2:#d3c7ac;
+    --ink:#1d2a21; --ink-soft:#54624f; --ink-dim:#8a907c;
+    --forest:#2c6a44; --forest2:#388552; --leaf:#4e9e64;
+    --amber:#a86f15; --amber-bri:#caa13b; --sky:#2f6f9e; --sky-bri:#5a9ec8;
+    --clay:#b14a26; --plum:#7a5aa6;
+    --skytop:#dfe7d8; --skybot:#f3eee2;
+    --shadow:0 1px 1px rgba(40,50,35,.04), 0 10px 26px -14px rgba(40,55,35,.32);
+    --shadow-lg:0 2px 2px rgba(40,50,35,.05), 0 26px 50px -20px rgba(35,55,35,.40);
+    --noise:.05; color-scheme:light;
+  }
+  html[data-theme="night"]{
+    --paper:#0d1410; --paper2:#0a110c;
+    --surface:#15201a; --surface2:#1b271f; --inset:#111b15;
+    --line:#293a2f; --line2:#34493b;
+    --ink:#e9f1e6; --ink-soft:#a9bdad; --ink-dim:#728777;
+    --forest:#5fbf72; --forest2:#7fcf9a; --leaf:#5fbf72;
+    --amber:#e7b84f; --amber-bri:#f3d182; --sky:#6cb6df; --sky-bri:#95cdec;
+    --clay:#e2674f; --plum:#b39ae0;
+    --skytop:#13211a; --skybot:#0d1410;
+    --shadow:0 1px 0 rgba(255,255,255,.02), 0 12px 30px -16px rgba(0,0,0,.6);
+    --shadow-lg:0 1px 0 rgba(255,255,255,.03), 0 30px 60px -22px rgba(0,0,0,.7);
+    --noise:.04; color-scheme:dark;
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    font-family:var(--font-ui); color:var(--ink); background:var(--paper);
+    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    padding-bottom:60px; overflow-x:hidden; line-height:1.55;
+  }
+  body::before{
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:0; opacity:var(--noise);
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .wrap{width:min(94%,1080px); margin-inline:auto; position:relative; z-index:1}
+
+  /* masthead */
+  .masthead{position:relative; z-index:1; overflow:hidden;
+    background:linear-gradient(180deg,var(--skytop),var(--skybot)); border-bottom:1px solid var(--line);}
+  .mast-inner{display:flex; align-items:center; gap:18px; padding:24px 0 20px; flex-wrap:wrap}
+  .brand{display:flex; align-items:center; gap:14px; min-width:0}
+  .mark{width:50px; height:50px; flex:0 0 auto; border-radius:14px; box-shadow:var(--shadow)}
+  .mark svg{display:block; width:100%; height:100%; border-radius:14px}
+  .brand-txt h1{font-family:var(--font-display); font-weight:600;
+    font-size:clamp(1.7rem,1.1rem+2.2vw,2.6rem); line-height:.98; margin:0; letter-spacing:-.018em}
+  .brand-txt p{margin:5px 0 0; color:var(--ink-soft); font-size:13.5px}
+  .chip{display:inline-flex; align-items:center; gap:6px; padding:2px 9px; border-radius:999px;
+    background:color-mix(in srgb,var(--forest2) 14%,transparent); color:var(--forest2);
+    border:1px solid color-mix(in srgb,var(--forest2) 30%,transparent); font-weight:600; font-size:11px}
+  .theme-btn{margin-left:auto; width:42px; height:42px; border-radius:12px; border:1px solid var(--line2);
+    cursor:pointer; background:var(--surface); color:var(--ink); display:grid; place-items:center;
+    transition:.2s var(--ease); box-shadow:var(--shadow)}
+  .theme-btn:hover{transform:translateY(-2px) rotate(-8deg); color:var(--amber)}
+  .theme-btn svg{width:20px; height:20px}
+
+  /* selector panel */
+  .panel{background:var(--surface); border:1px solid var(--line); border-radius:var(--r);
+    box-shadow:var(--shadow); padding:20px 22px; margin-top:26px}
+  .panel-h{font-family:var(--font-display); font-weight:600; font-size:1.05rem; margin:0 0 3px}
+  .panel-sub{color:var(--ink-soft); font-size:13px; margin:0 0 16px}
+  .selrow{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+  @media(max-width:640px){.selrow{grid-template-columns:1fr}}
+  .field label{display:block; font-size:11px; text-transform:uppercase; letter-spacing:.12em;
+    color:var(--ink-dim); font-weight:600; margin-bottom:6px}
+  select{width:100%; font-family:var(--font-ui); font-size:15px; font-weight:500; color:var(--ink);
+    background:var(--inset); border:1px solid var(--line2); border-radius:var(--r-sm); padding:12px 14px;
+    appearance:none; cursor:pointer; transition:.15s var(--ease);
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%238a907c' stroke-width='2'%3E%3Cpath d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
+    background-repeat:no-repeat; background-position:right 12px center; padding-right:38px}
+  select:focus{outline:none; border-color:var(--forest2); box-shadow:0 0 0 3px color-mix(in srgb,var(--forest2) 20%,transparent)}
+
+  /* result */
+  #result{margin-top:22px; display:grid; gap:18px}
+  .card{background:var(--surface); border:1px solid var(--line); border-radius:var(--r);
+    box-shadow:var(--shadow); overflow:hidden; animation:rise .4s var(--ease) both}
+  @keyframes rise{from{opacity:0; transform:translateY(10px)}to{opacity:1; transform:none}}
+  .card-head{display:flex; align-items:center; gap:11px; padding:15px 20px; border-bottom:1px solid var(--line);
+    background:var(--surface2)}
+  .card-head .ic{width:30px; height:30px; flex:0 0 auto; border-radius:9px; display:grid; place-items:center;
+    color:#fff; font-size:16px}
+  .ic.fert{background:linear-gradient(135deg,var(--forest2),var(--forest))}
+  .ic.pest{background:linear-gradient(135deg,var(--clay),#8f3a1d)}
+  .ic.region{background:linear-gradient(135deg,var(--sky),#245a82)}
+  .card-head h3{font-family:var(--font-display); font-weight:600; font-size:1.08rem; margin:0}
+  .card-head .tag{margin-left:auto; font-size:11px; color:var(--ink-dim); font-weight:600;
+    text-transform:uppercase; letter-spacing:.1em}
+  .card-body{padding:16px 20px 19px}
+  .kv{display:grid; grid-template-columns:120px 1fr; gap:6px 14px; font-size:14px}
+  .kv dt{color:var(--ink-dim); font-weight:600; font-size:12px; text-transform:uppercase; letter-spacing:.06em; padding-top:2px}
+  .kv dd{margin:0; color:var(--ink)}
+  .kv dd b{color:var(--forest2)}
+  .rule{margin-top:14px; padding:11px 14px; border-radius:var(--r-sm); font-size:13.5px;
+    background:color-mix(in srgb,var(--amber) 12%,transparent); border:1px solid color-mix(in srgb,var(--amber) 30%,transparent)}
+  .rule b{color:var(--amber)}
+  html[data-theme="night"] .rule b{color:var(--amber-bri)}
+
+  .pest{padding:12px 0; border-top:1px dashed var(--line)}
+  .pest:first-child{border-top:none; padding-top:2px}
+  .pest .pn{font-weight:650; font-size:14.5px; display:flex; align-items:center; gap:8px; flex-wrap:wrap}
+  .ladder{list-style:none; margin:8px 0 0; padding:0; counter-reset:step}
+  .ladder li{position:relative; padding:3px 0 3px 28px; font-size:13.5px; color:var(--ink-soft)}
+  .ladder li::before{counter-increment:step; content:counter(step); position:absolute; left:0; top:2px;
+    width:19px; height:19px; border-radius:6px; background:var(--inset); border:1px solid var(--line2);
+    font-size:11px; font-weight:700; color:var(--ink-dim); display:grid; place-items:center}
+  .ladder li:last-child::before{background:color-mix(in srgb,var(--clay) 16%,transparent); color:var(--clay); border-color:color-mix(in srgb,var(--clay) 35%,transparent)}
+  .ladder li b{color:var(--ink)}
+  .badge{display:inline-flex; align-items:center; gap:4px; font-size:10.5px; font-weight:700; padding:1px 7px;
+    border-radius:999px; text-transform:uppercase; letter-spacing:.04em}
+  .badge.bee{background:color-mix(in srgb,var(--amber) 16%,transparent); color:var(--amber); border:1px solid color-mix(in srgb,var(--amber) 32%,transparent)}
+  .badge.phi{background:color-mix(in srgb,var(--forest2) 14%,transparent); color:var(--forest2); border:1px solid color-mix(in srgb,var(--forest2) 30%,transparent)}
+  .badge.fungal{background:color-mix(in srgb,var(--plum) 16%,transparent); color:var(--plum); border:1px solid color-mix(in srgb,var(--plum) 32%,transparent)}
+
+  .callout{display:flex; gap:11px; padding:12px 14px; border-radius:var(--r-sm); font-size:13.5px; margin-top:10px}
+  .callout:first-child{margin-top:0}
+  .callout .cd{flex:0 0 auto; font-size:15px; line-height:1.3}
+  .callout.warn{background:color-mix(in srgb,var(--clay) 11%,transparent); border:1px solid color-mix(in srgb,var(--clay) 28%,transparent)}
+  .callout.warn b{color:var(--clay)}
+  .callout.good{background:color-mix(in srgb,var(--forest2) 11%,transparent); border:1px solid color-mix(in srgb,var(--forest2) 26%,transparent)}
+  .callout.good b{color:var(--forest2)}
+  .callout.info{background:color-mix(in srgb,var(--sky) 10%,transparent); border:1px solid color-mix(in srgb,var(--sky) 26%,transparent)}
+  .callout.info b{color:var(--sky)}
+  html[data-theme="night"] .callout.info b{color:var(--sky-bri)}
+
+  /* principles */
+  .principles{margin-top:30px}
+  .principles h2{font-family:var(--font-display); font-weight:600; font-size:1.3rem; margin:0 0 4px}
+  .principles .lede{color:var(--ink-soft); font-size:13.5px; margin:0 0 16px}
+  .grid3{display:grid; grid-template-columns:repeat(3,1fr); gap:14px}
+  @media(max-width:760px){.grid3{grid-template-columns:1fr}}
+  .mini{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:15px 17px; box-shadow:var(--shadow)}
+  .mini h4{margin:0 0 8px; font-size:14px; font-weight:650; display:flex; align-items:center; gap:8px}
+  .mini ol,.mini ul{margin:0; padding-left:18px; font-size:13px; color:var(--ink-soft)}
+  .mini li{margin:4px 0}
+  .mini li b{color:var(--ink)}
+  .kit{display:flex; flex-direction:column; gap:8px}
+  .kit-item{display:flex; gap:10px; align-items:flex-start; font-size:13px}
+  .kit-item .dot{flex:0 0 auto; width:9px; height:9px; border-radius:50%; margin-top:5px}
+
+  footer{margin-top:30px; padding:16px 18px; background:var(--inset); border:1px solid var(--line);
+    border-radius:var(--r); font-size:12px; color:var(--ink-dim)}
+  footer b{color:var(--ink-soft)}
+  .src{margin-top:14px; font-size:11.5px; color:var(--ink-dim); text-align:center}
+</style>
+</head>
+<body>
+<header class="masthead">
+  <div class="wrap mast-inner">
+    <div class="brand">
+      <div class="mark"><svg viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#1f4d33"/><circle cx="22.5" cy="9.5" r="3.1" fill="#e7b84f"/><path d="M16 27 C16 19 16 16 16 13" stroke="#a7e2b3" stroke-width="2.1" stroke-linecap="round" fill="none"/><path d="M16 18 C11.5 18 8.5 14.8 8.5 10.2 C13.4 10.2 16 13 16 18 Z" fill="#5fbf72"/><path d="M16 21 C20.5 21 23.5 18 23.5 14 C18.6 14 16 16.6 16 21 Z" fill="#3f8f55"/></svg></div>
+      <div class="brand-txt">
+        <h1>Fertilizer &amp; Pest Guide</h1>
+        <p><span class="chip">Garden Ops</span> &nbsp;Pick a plant type and your region for tailored feeding &amp; IPM advice</p>
+      </div>
+    </div>
+    <button class="theme-btn" id="themeBtn" title="Toggle day / night" aria-label="Toggle theme">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    </button>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="panel">
+    <h2 class="panel-h">What are you feeding?</h2>
+    <p class="panel-sub">Recommendations follow an IPM-first philosophy: identify, try the gentlest control, escalate only if needed.</p>
+    <div class="selrow">
+      <div class="field">
+        <label for="plantSel">Plant type</label>
+        <select id="plantSel" aria-label="Plant type"></select>
+      </div>
+      <div class="field">
+        <label for="regionSel">Region / hardiness zone</label>
+        <select id="regionSel" aria-label="Region"></select>
+      </div>
+    </div>
+  </section>
+
+  <section id="result" aria-live="polite"></section>
+
+  <section class="principles">
+    <h2>Universal ground rules</h2>
+    <p class="lede">These apply no matter what you grow or where.</p>
+    <div class="grid3">
+      <div class="mini">
+        <h4>🪜 The IPM ladder</h4>
+        <ol>
+          <li><b>Identify</b> the pest before spraying anything</li>
+          <li><b>Physical</b> — hand-pick, row cover, netting, water blast</li>
+          <li><b>Biological / soft</b> — insecticidal soap, BTK, horticultural oil, iron phosphate</li>
+          <li><b>Targeted</b> — spinosad for specific stubborn pests</li>
+          <li><b>Broad-spectrum</b> — pyrethrin, only as a last resort</li>
+        </ol>
+      </div>
+      <div class="mini">
+        <h4>🧰 The starter kit</h4>
+        <div class="kit">
+          <div class="kit-item"><span class="dot" style="background:var(--forest2)"></span><span><b>Insecticidal soap</b> — aphids, mites, soft-bodied bugs</span></div>
+          <div class="kit-item"><span class="dot" style="background:var(--leaf)"></span><span><b>BTK</b> — caterpillars only; bee-safe</span></div>
+          <div class="kit-item"><span class="dot" style="background:var(--amber)"></span><span><b>Spinosad</b> — beetles &amp; tough pests; dusk only</span></div>
+          <div class="kit-item"><span class="dot" style="background:var(--sky)"></span><span><b>Iron phosphate bait</b> — slugs; pet-safe</span></div>
+          <div class="kit-item"><span class="dot" style="background:var(--clay)"></span><span><b>Horticultural oil</b> — mites, scale, overwintering</span></div>
+        </div>
+      </div>
+      <div class="mini">
+        <h4>🐝 Stay safe</h4>
+        <ul>
+          <li><b>Never spray open blossoms.</b> Apply at <b>dusk</b> when pollinators aren't foraging</li>
+          <li>Spinosad &amp; pyrethrin are bee-toxic <b>while wet</b> — safe once dry</li>
+          <li>Soap, BTK, spinosad, iron phosphate have short / zero <b>pre-harvest intervals</b> — rinse produce</li>
+          <li>Fungal problems (mildew, blackspot, knot) need <b>fungicides/sanitation</b>, not insecticide</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <b>Disclaimer:</b> This is general horticultural guidance. Soil pH, frost dates, and pest pressure vary by your exact microclimate — confirm with a soil test and your local extension office (or Master Gardeners). <b>Pesticide registrations differ by country, province, and state and change yearly</b> — verify any product is registered where you live (Health Canada PMRA in Canada, US EPA / state in the US) before buying. BTK, insecticidal soap, spinosad, and iron phosphate are widely available in both countries.
+    <div class="src">Garden Ops · Fertilizer &amp; Pest Guide · extensible reference — add plant types &amp; regions in the data model</div>
+  </footer>
+</main>
+
+<script>
+/*===ENGINE-START===*/
+const REGIONS = {
+  prairie: {
+    label:"Prairie / Northern Plains (Zone 2–4)",
+    examples:"Edmonton, Calgary, Saskatoon, Winnipeg, ND, MN, MT",
+    soil:"alkaline", soilPh:"7.2–8.0", season:"short", nStop:"by Aug 1",
+    wet:false, hotDry:false, easternPests:false,
+    blurb:"Short ~100–135 day season, alkaline soil, hard winters. Cold kills many overwintering pests but punishes soft late growth."
+  },
+  mountain: {
+    label:"Mountain West / Intermountain (Zone 4–6)",
+    examples:"Denver, Salt Lake City, Boise, Calgary foothills",
+    soil:"alkaline", soilPh:"7.5–8.2", season:"moderate", nStop:"by mid-Aug",
+    wet:false, hotDry:true, easternPests:false,
+    blurb:"Semi-arid, alkaline and often saline soils, intense sun and big day-night swings. Dry air favors spider mites."
+  },
+  greatlakes: {
+    label:"Upper Midwest / Great Lakes / ON–QC (Zone 4–6)",
+    examples:"Toronto, Montreal, Chicago, Minneapolis, Detroit",
+    soil:"neutral", soilPh:"6.2–7.5", season:"moderate", nStop:"by mid-Aug",
+    wet:false, hotDry:false, easternPests:true,
+    blurb:"Moderate ~140–170 day season, near-neutral variable soils. Japanese beetle and codling moth are regional staples."
+  },
+  northeast: {
+    label:"Northeast / Mid-Atlantic (Zone 5–7)",
+    examples:"New York, Boston, Philadelphia, Washington DC",
+    soil:"acidic", soilPh:"5.5–6.8", season:"long", nStop:"by late Aug",
+    wet:false, hotDry:false, easternPests:true,
+    blurb:"Long ~160–200 day season, acidic-to-neutral soils, humid summers raise fungal pressure. Eastern beetle pests present."
+  },
+  pnw: {
+    label:"Pacific Northwest / Coastal BC (Zone 7–9)",
+    examples:"Vancouver, Seattle, Portland, Victoria",
+    soil:"acidic", soilPh:"5.0–6.5", season:"long", nStop:"by early Sept",
+    wet:true, hotDry:false, easternPests:false,
+    blurb:"Mild, long, very wet. Acidic soils suit blueberries naturally. Slugs and powdery mildew are the dominant problems."
+  },
+  southeast: {
+    label:"Southeast / Gulf (Zone 7–9)",
+    examples:"Atlanta, Houston, Charlotte, North Florida",
+    soil:"acidic", soilPh:"5.0–6.0", season:"very-long", nStop:"by early Sept",
+    wet:true, hotDry:false, easternPests:true,
+    blurb:"Very long 220+ day season, acidic soils, heat and humidity. Multiple pest generations and heavy fungal/SWD pressure."
+  },
+  southwest: {
+    label:"Southwest / California (Zone 8–10)",
+    examples:"Phoenix, Los Angeles, Central Valley, Las Vegas",
+    soil:"alkaline", soilPh:"7.5–8.3", season:"very-long", nStop:"ease off in peak heat",
+    wet:false, hotDry:true, easternPests:false,
+    blurb:"Near year-round growing, alkaline/saline soils, intense heat. Low fungal pressure but heavy spider mite and whitefly."
+  }
+};
+
+const PLANTS = {
+  leafy: {
+    label:"Leafy greens & brassicas", note:"kale, lettuce, spinach, chard, cabbage, arugula",
+    flags:{brassica:true, heavyFeeder:true, slugProne:true},
+    fert:{ type:"High-nitrogen all-purpose (e.g. 24-8-16 soluble) or blood/alfalfa meal",
+      npk:"High N — the nitrogen grows the leaves you eat",
+      schedule:"Every 1–2 weeks, half strength, all season",
+      rate:"~11 mL (¾ tbsp) soluble per 6 L water as a soil drench, or side-dress compost",
+      rule:"Don't taper off — unlike fruiting crops, you want continuous leafy growth right up to harvest." },
+    pests:[
+      {n:"Cabbage worm / looper", ladder:["Row cover from transplant","Hand-pick green caterpillars","<b>BTK</b> spray every 7–10 days while feeding"], badges:["bee","phi"]},
+      {n:"Flea beetle", ladder:["Floating row cover while seedlings are small","Tolerate minor shot-hole damage","<b>Pyrethrin</b> only if a young crop is being destroyed"], badges:[]},
+      {n:"Aphids (incl. grey cabbage aphid)", ladder:["Blast colonies off with water early","<b>Insecticidal soap</b>, hitting leaf undersides","Repeat at 4–5 day intervals"], badges:["phi"]},
+      {n:"Slugs", ladder:["Reduce damp mulch and debris","Beer traps / diatomaceous earth","<b>Iron phosphate bait</b>"], badges:["phi"]}
+    ]
+  },
+  fruitveg: {
+    label:"Fruiting vegetables", note:"tomato, pepper, eggplant, cucumber, squash, beans",
+    flags:{fruitingVeg:true, heavyFeeder:true, mitesProne:true},
+    fert:{ type:"Switch formulas: all-purpose early → bloom/low-N (5-10-10 or 15-30-15) at flowering",
+      npk:"High N at transplant for foliage, then LOW N + higher P-K once flowers appear",
+      schedule:"Every 2 weeks; long-season regions feed more often in peak",
+      rate:"Bloom-type soluble at label rate, or side-dress compost + bone meal at flowering",
+      rule:"Too much nitrogen after flowering gives lush leaves but little fruit — and triggers blossom-end rot in tomato & pepper. Add calcium." },
+    pests:[
+      {n:"Aphids", ladder:["Water blast","<b>Insecticidal soap</b>","Encourage ladybugs"], badges:["phi"]},
+      {n:"Tomato/tobacco hornworm", ladder:["Hand-pick (look for frass)","<b>BTK</b> while caterpillars are small"], badges:["bee","phi"]},
+      {n:"Cucumber beetle (cuke/squash)", ladder:["Row cover until flowering","Hand-pick","<b>Spinosad</b> at dusk if overwhelmed"], badges:["bee"]},
+      {n:"Spider mites (hot, dry spells)", ladder:["Hose down foliage","<b>Insecticidal soap</b> or horticultural oil","Repeat every 5–7 days"], badges:["phi"]},
+      {n:"Whitefly", ladder:["Yellow sticky traps","<b>Insecticidal soap</b> on undersides"], badges:["phi"]}
+    ]
+  },
+  root: {
+    label:"Root & bulb crops", note:"potato, carrot, beet, onion, garlic",
+    flags:{rootCrop:true},
+    fert:{ type:"Low-nitrogen, higher P-K (e.g. 5-10-10) — NOT an all-purpose high-N feed",
+      npk:"Low N, higher P & K. Excess nitrogen makes tops, not roots or bulbs",
+      schedule:"Light feed at planting + once at bulking; stop ~3 weeks before harvest (garlic/onion: stop once bulbing)",
+      rate:"Granular 5-10-10 worked into the bed, or a dilute bloom-type soluble",
+      rule:"Avoid all-purpose 24-8-16 here — it gives you leafy tops and small spuds/bulbs." },
+    pests:[
+      {n:"Colorado potato beetle", ladder:["Hand-pick adults + orange egg masses under leaves <b>daily</b>","Mulch straw to impede them","<b>Spinosad</b> at dusk if a bed is overwhelmed"], badges:["bee","phi"]},
+      {n:"Carrot rust fly", ladder:["Floating row cover edge-to-edge","Rotate away from last year's carrots","Avoid thinning at dusk (scent lures the fly)"], badges:[]},
+      {n:"Onion maggot", ladder:["Rotate crop","Row cover at emergence","Remove culls that attract egg-laying"], badges:[]},
+      {n:"Wireworm", ladder:["Bury potato/carrot bait traps and remove","Cultivate soil before planting","Avoid planting after grass/sod"], badges:[]}
+    ]
+  },
+  herbs: {
+    label:"Culinary herbs", note:"basil, parsley, cilantro, chives, mint",
+    flags:{slugProne:true},
+    fert:{ type:"Light feeding only — most herbs",
+      npk:"Low and infrequent. Heavy nitrogen dulls aroma and essential-oil content (basil especially)",
+      schedule:"About once a month, quarter-to-half strength",
+      rate:"Dilute all-purpose soluble, or simply a compost top-dress",
+      rule:"Pinch flower buds to keep tender leaves coming; don't over-feed or you trade flavour for size." },
+    pests:[
+      {n:"Aphids", ladder:["Water blast","<b>Insecticidal soap</b> (rinse before eating)"], badges:["phi"]},
+      {n:"Slugs (basil)", ladder:["Remove damp hiding spots","<b>Iron phosphate bait</b>"], badges:["phi"]},
+      {n:"Spider mites (indoor / dry)", ladder:["Raise humidity, hose foliage","Horticultural oil or soap"], badges:["phi"]}
+    ]
+  },
+  strawberry: {
+    label:"Strawberries", note:"June-bearing & everbearing",
+    flags:{slugProne:true, mitesProne:true},
+    fert:{ type:"Balanced (10-10-10); timing depends on type",
+      npk:"Balanced. June-bearers: feed AFTER harvest (renovation). Everbearers: light monthly",
+      schedule:"Spring + post-harvest (June-bearing); light monthly (everbearing)",
+      rate:"Balanced granular worked around crowns, or half-strength soluble",
+      rule:"Excess nitrogen gives leaves and soft, rot-prone berries. Mulch with clean straw to keep fruit off soil." },
+    pests:[
+      {n:"Slugs", ladder:["Straw mulch kept dry","Beer traps / DE","<b>Iron phosphate bait</b>"], badges:["phi"]},
+      {n:"Birds", ladder:["Bird netting over the bed (not an insecticide job)"], badges:[]},
+      {n:"Spotted wing drosophila (SWD)", ladder:["Harvest ripe fruit frequently & completely","Vinegar/yeast traps","Chill berries immediately to stop larvae"], badges:[]},
+      {n:"Spider mites (hot spells)", ladder:["Hose foliage","<b>Insecticidal soap</b>"], badges:["phi"]}
+    ]
+  },
+  brambles: {
+    label:"Cane berries / brambles", note:"raspberry, blackberry, boysenberry",
+    flags:{woodyPerennial:true, nStopMatters:true},
+    fert:{ type:"Balanced spring feed (10-10-10) + light early summer",
+      npk:"Balanced — moderate. Front-load it early",
+      schedule:"Spring at bud-break + a light feed by early summer, then nothing",
+      rate:"Granular balanced spread along the row, or half-strength soluble twice",
+      rule:"HARD STOP nitrogen by midsummer so canes harden — soft late growth winterkills, and dead canes mean no fruit." },
+    pests:[
+      {n:"Raspberry sawfly / sawfly larvae", ladder:["Hand-pick larvae","<b>Insecticidal soap</b>","<b>Pyrethrin</b> only if severe"], badges:["phi"]},
+      {n:"Spotted wing drosophila (SWD)", ladder:["Pick every 1–2 days, remove overripe fruit","Vinegar traps","Refrigerate harvest immediately"], badges:[]},
+      {n:"Cane borer", ladder:["Prune 15 cm below wilted shoot tips","Burn or bin prunings"], badges:[]},
+      {n:"Japanese beetle (eastern regions)", ladder:["Hand-pick into soapy water at dawn","Traps placed AWAY from the patch","Spinosad at dusk if heavy"], badges:["bee"]}
+    ]
+  },
+  blueberry: {
+    label:"Blueberries & acid-loving fruit", note:"blueberry, lingonberry, cranberry",
+    flags:{acidLover:true},
+    fert:{ type:"ACID fertilizer only (azalea/rhododendron type, ammonium-N) + elemental sulphur",
+      npk:"Special case — ammonium-based acidic feed (e.g. 30-10-10 acid, or organic cottonseed meal)",
+      schedule:"Spring + early summer; stop by midsummer",
+      rate:"Per acid-food label; add elemental sulphur per soil test to hold pH 4.5–5.5",
+      rule:"NEVER use all-purpose 24-8-16 — it raises pH and causes iron chlorosis (yellow leaf, green veins). pH is everything for these plants." },
+    pests:[
+      {n:"Birds", ladder:["Netting at fruit set (not an insecticide job)"], badges:[]},
+      {n:"Spotted wing drosophila (SWD)", ladder:["Frequent complete harvest","Vinegar traps","Chill fruit fast"], badges:[]},
+      {n:"Mummy berry", ladder:["Fungal, not insect — rake & remove fallen mummified berries","Mulch to bury overwintering spores"], badges:["fungal"]}
+    ]
+  },
+  treefruit: {
+    label:"Tree fruit", note:"apple, pear, cherry, plum",
+    flags:{woodyPerennial:true, nStopMatters:true},
+    fert:{ type:"Little to none — restraint is the rule",
+      npk:"Low. None the first year; established trees take a light balanced spring feed only",
+      schedule:"Once in early spring, if at all. Judge by shoot growth (30–45 cm/yr means it's fed enough)",
+      rate:"Balanced granular spread at the dripline, or a compost ring",
+      rule:"Over-feeding pushes soft growth, invites fireblight, and produces leaves instead of flowers." },
+    pests:[
+      {n:"Codling moth (apple/pear)", ladder:["Pheromone traps to time sprays","Kaolin clay coating","<b>Spinosad</b> timed to egg-hatch, at dusk"], badges:["bee","phi"]},
+      {n:"Aphids", ladder:["Water blast","<b>Insecticidal soap</b>","Protect ladybugs/lacewings"], badges:["phi"]},
+      {n:"Tent caterpillar", ladder:["Prune out tents in morning","<b>BTK</b> while small"], badges:["bee","phi"]},
+      {n:"Black knot (cherry/plum)", ladder:["Fungal — prune 15–20 cm below black galls in winter","Burn prunings"], badges:["fungal"]},
+      {n:"Plum curculio (eastern regions)", ladder:["Collect & destroy dropped fruit","Kaolin clay","Spinosad at petal-fall if heavy"], badges:["bee"]}
+    ]
+  },
+  grape: {
+    label:"Grapes / fruiting vines", note:"table & wine grapes, hardy vines",
+    flags:{woodyPerennial:true, nStopMatters:true},
+    fert:{ type:"Light — often nothing in decent soil",
+      npk:"Low. Vigorous vines fruit poorly when over-fed",
+      schedule:"A light balanced feed at bud-break only if growth is weak",
+      rate:"Compost or a modest balanced granular at the base",
+      rule:"High nitrogen = all vine, no fruit. Stop nitrogen by midsummer to ripen wood for winter." },
+    pests:[
+      {n:"Powdery mildew", ladder:["Fungal — open the canopy for airflow","Avoid wetting foliage","Sulphur spray on a schedule"], badges:["fungal"]},
+      {n:"Japanese beetle (eastern regions)", ladder:["Hand-pick at dawn","Traps away from vines"], badges:["bee"]},
+      {n:"Leafhoppers", ladder:["Tolerate light stippling","<b>Insecticidal soap</b> if heavy"], badges:["phi"]}
+    ]
+  },
+  potted: {
+    label:"Tender potted / tropical", note:"fig, citrus, patio containers, overwintered plants",
+    flags:{container:true, mitesProne:true, nStopMatters:true},
+    fert:{ type:"Regular balanced or fruit formula at HALF strength (containers leach fast)",
+      npk:"Moderate balanced; citrus wants a dedicated citrus food (higher N + micronutrients)",
+      schedule:"Every 2–3 weeks during active growth, then taper to harden before dormancy / indoor move",
+      rate:"Half-strength soluble each feed",
+      rule:"Stop feeding ~6 weeks before bringing the plant indoors or into dormancy, so growth firms up." },
+    pests:[
+      {n:"Spider mites (esp. after indoor storage)", ladder:["Hose undersides","<b>Insecticidal soap</b> or horticultural oil","Repeat weekly until clear"], badges:["phi"]},
+      {n:"Scale", ladder:["Wipe with alcohol swab","Horticultural oil to smother"], badges:[]},
+      {n:"Mealybug", ladder:["Dab with alcohol","Insecticidal soap","Isolate from other plants"], badges:[]},
+      {n:"Fungus gnats (indoors)", ladder:["Let topsoil dry between waterings","BTi / mosquito-bits in water","Yellow sticky traps"], badges:[]}
+    ]
+  },
+  annuals: {
+    label:"Annual flowers & ornamentals", note:"petunia, marigold, geranium, container colour",
+    flags:{slugProne:true, mitesProne:true},
+    fert:{ type:"Bloom formula (lower N, higher P-K, e.g. 15-30-15); all-purpose fine early",
+      npk:"Lower N, higher P-K for flowers. Containers need frequent feeding",
+      schedule:"Every 1–2 weeks soluble, or a slow-release granule at planting",
+      rate:"Bloom-type soluble at label rate; deadhead spent blooms",
+      rule:"Leggy plants with few flowers usually mean too much nitrogen or too little light." },
+    pests:[
+      {n:"Aphids", ladder:["Water blast","<b>Insecticidal soap</b>"], badges:["phi"]},
+      {n:"Spider mites (hot, dry)", ladder:["Hose foliage","Soap or horticultural oil"], badges:["phi"]},
+      {n:"Thrips", ladder:["Blue sticky traps","Insecticidal soap","Remove damaged buds"], badges:["phi"]},
+      {n:"Slugs (hosta, etc.)", ladder:["Clear damp debris","<b>Iron phosphate bait</b>"], badges:["phi"]}
+    ]
+  },
+  perennials: {
+    label:"Perennials & roses", note:"roses, flowering perennials, shrubs",
+    flags:{woodyPerennial:true, nStopMatters:true},
+    fert:{ type:"Balanced spring feed; roses are heavier feeders",
+      npk:"Balanced. Roses take a rose food or balanced feed monthly to midsummer",
+      schedule:"Spring + early summer; roses monthly. Stop nitrogen ~8 weeks before first frost",
+      rate:"Granular rose/all-purpose, or soluble at label rate",
+      rule:"Late-season feeding forces soft growth that winterkills — ease off heading into fall." },
+    pests:[
+      {n:"Aphids (roses)", ladder:["Water blast new growth","<b>Insecticidal soap</b>","Protect beneficials"], badges:["phi"]},
+      {n:"Rose slug (sawfly)", ladder:["Hand-pick","<b>Insecticidal soap</b> on undersides"], badges:["phi"]},
+      {n:"Japanese beetle (eastern regions)", ladder:["Hand-pick at dawn","Traps away from beds"], badges:["bee"]},
+      {n:"Blackspot / powdery mildew", ladder:["Fungal — improve airflow, water at the base","Remove infected leaves","Fungicide on a schedule if chronic"], badges:["fungal"]}
+    ]
+  }
+};
+
+function regionCallouts(plant, region){
+  const f = plant.flags, out = [];
+  if(f.acidLover){
+    if(region.soil==="alkaline")
+      out.push({t:"warn", i:"⚠", h:"Soil works against you here",
+        b:`Your region's soil is <b>alkaline (pH ${region.soilPh})</b> and this plant demands pH 4.5–5.5. Grow it in containers of peat-based acidic mix, feed an acid fertilizer, add elemental sulphur, and watch for iron chlorosis.`});
+    else if(region.soil==="acidic")
+      out.push({t:"good", i:"✓", h:"Your soil suits it naturally",
+        b:`The acidic soil here <b>(pH ${region.soilPh})</b> is close to ideal for acid-lovers — you may need little or no sulphur. Still use an acid-type fertilizer to keep it there.`});
+    else
+      out.push({t:"info", i:"◐", h:"Near-neutral soil — adjust down",
+        b:`Soil here is roughly neutral <b>(pH ${region.soilPh})</b>. You'll need elemental sulphur plus an acid fertilizer to hold pH 4.5–5.5; container growing is easiest.`});
+  }
+  if(f.brassica){
+    if(region.soil==="acidic")
+      out.push({t:"info", i:"◐", h:"Lime for brassicas",
+        b:`Acidic soil <b>(pH ${region.soilPh})</b> raises clubroot risk in the cabbage family — lime to pH 6.8–7.2 before planting brassicas.`});
+    else if(region.soil==="alkaline")
+      out.push({t:"good", i:"✓", h:"Clubroot unlikely",
+        b:`Alkaline soil <b>(pH ${region.soilPh})</b> suppresses clubroot — good for brassicas. Just watch for boron/manganese lock-out (interveinal yellowing).`});
+  }
+  if(f.nStopMatters){
+    const cold = region.season==="short";
+    out.push({t:"info", i:"❄", h:"Stop feeding to beat frost",
+      b:`Stop nitrogen <b>${region.nStop}</b> so growth hardens before your first frost.${cold?" Cold-zone winters are unforgiving of soft late growth — this timing directly protects next year's harvest.":""}`});
+  }
+  if(f.fruitingVeg || f.heavyFeeder){
+    if(region.season==="very-long")
+      out.push({t:"info", i:"☀", h:"Very long season — feed often",
+        b:"With a 220+ day season you can feed every 7–10 days at peak and may get two crops — but expect multiple, overlapping pest generations."});
+    else if(region.season==="long")
+      out.push({t:"info", i:"☀", h:"Long season — keep it fed",
+        b:"A long season rewards steady feeding through summer. Watch for a strong second pest wave in late summer."});
+    else if(region.season==="short")
+      out.push({t:"info", i:"⏱", h:"Short season — front-load",
+        b:"With a short season, the flowering feed matters most — get plants established and into bloom fast; don't waste weeks under-fed."});
+  }
+  if(f.slugProne && region.wet)
+    out.push({t:"warn", i:"🐌", h:"Heavy slug country",
+      b:"Your wet climate means relentless slug pressure. Lean on <b>iron phosphate bait</b>, keep mulch from staying soggy, and water in the morning so the surface dries by night."});
+  if(f.mitesProne && region.hotDry)
+    out.push({t:"warn", i:"🕷", h:"Mite & whitefly weather",
+      b:"Hot, dry air here favors <b>spider mites and whitefly</b>. Hose foliage regularly and reach for insecticidal soap or horticultural oil early, before stippling spreads."});
+  if(region.easternPests && (f.woodyPerennial || f.fruitingVeg))
+    out.push({t:"info", i:"🪲", h:"Watch for Japanese beetle",
+      b:"This region has Japanese beetle and related chewers. Hand-pick into soapy water at dawn when they're sluggish, and keep any pheromone traps <b>far from</b> the plants you're protecting."});
+  return out;
+}
+
+function buildRecs(plantId, regionId){
+  const plant = PLANTS[plantId], region = REGIONS[regionId];
+  return { plant, region, callouts: regionCallouts(plant, region) };
+}
+/*===ENGINE-END===*/
+
+/* ---------- DOM wiring (skipped in headless tests) ---------- */
+if (typeof document !== "undefined") {
+  const $ = s => document.querySelector(s);
+  const plantSel = $("#plantSel"), regionSel = $("#regionSel"), result = $("#result");
+
+  Object.entries(PLANTS).forEach(([id,p])=>{
+    const o=document.createElement("option"); o.value=id; o.textContent=p.label; plantSel.appendChild(o);
+  });
+  Object.entries(REGIONS).forEach(([id,r])=>{
+    const o=document.createElement("option"); o.value=id; o.textContent=r.label; regionSel.appendChild(o);
+  });
+  regionSel.value = "prairie"; // sensible default for this garden
+
+  const esc = s => String(s);
+  const badge = b => b==="bee" ? '<span class="badge bee">🐝 bee-toxic wet</span>'
+                   : b==="phi" ? '<span class="badge phi">edible-safe</span>'
+                   : b==="fungal" ? '<span class="badge fungal">fungal — not a bug</span>' : '';
+
+  function render(){
+    const {plant, region, callouts} = buildRecs(plantSel.value, regionSel.value);
+    const pestHtml = plant.pests.map(p=>`
+      <div class="pest">
+        <div class="pn">${esc(p.n)} ${p.badges.map(badge).join(" ")}</div>
+        <ol class="ladder">${p.ladder.map(s=>`<li>${s}</li>`).join("")}</ol>
+      </div>`).join("");
+    const coHtml = callouts.map(c=>`
+      <div class="callout ${c.t}"><div class="cd">${c.i}</div><div><b>${esc(c.h)}.</b> ${c.b}</div></div>`).join("");
+
+    result.innerHTML = `
+      <div class="card">
+        <div class="card-head"><div class="ic region">📍</div><h3>${esc(region.label)}</h3><span class="tag">your region</span></div>
+        <div class="card-body">
+          <p style="margin:0 0 4px;color:var(--ink-soft);font-size:13.5px">${esc(region.blurb)}</p>
+          <p style="margin:0;font-size:12.5px;color:var(--ink-dim)">e.g. ${esc(region.examples)} · soil ${esc(region.soil)} (pH ${esc(region.soilPh)})</p>
+          ${coHtml ? `<div style="margin-top:14px">${coHtml}</div>` : ""}
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><div class="ic fert">🌱</div><h3>Fertilizer — ${esc(plant.label)}</h3><span class="tag">${esc(plant.note)}</span></div>
+        <div class="card-body">
+          <dl class="kv">
+            <dt>Use</dt><dd>${plant.fert.type}</dd>
+            <dt>NPK logic</dt><dd>${plant.fert.npk}</dd>
+            <dt>How often</dt><dd>${plant.fert.schedule}</dd>
+            <dt>Rate</dt><dd>${plant.fert.rate}</dd>
+          </dl>
+          <div class="rule"><b>Key rule:</b> ${plant.fert.rule}</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><div class="ic pest">🐛</div><h3>Pests &amp; insecticides — ${esc(plant.label)}</h3><span class="tag">IPM-first</span></div>
+        <div class="card-body">${pestHtml}</div>
+      </div>`;
+  }
+
+  plantSel.addEventListener("change", render);
+  regionSel.addEventListener("change", render);
+  render();
+
+  // theme toggle
+  const tb = $("#themeBtn"), root = document.documentElement;
+  tb.addEventListener("click", ()=>{
+    root.dataset.theme = root.dataset.theme==="day" ? "night" : "day";
+  });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+{
+  "garden_id": "kaleb-home-edmonton",
+  "name": "Home Garden",
+  "location": { "city": "Edmonton", "province": "AB", "lat": 53.5461, "lon": -113.4938, "timezone": "America/Edmonton" },
+  "hardiness_zone": "4a",
+  "frost": { "avg_last_spring": "05-07", "safe_planting": "05-18", "avg_first_fall": "09-22" },
+  "units": "metric",
+  "notifications": { "channel": "telegram", "bot": "@brainwave_hermes_bot", "daily_brief_time": "07:00" }
+}

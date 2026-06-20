@@ -1,0 +1,348 @@
+{
+  "_comment": "Seasonal schedules for Garden Ops — Edmonton zone 4a. Derived from web research (2026-06-14) + the existing registry. Holds the data the registry lacks: harvest windows, spring-prep and fall/winter-prep tasks, plus a garden-wide month-by-month task calendar. The dashboard build script reads this alongside plants.json/zones.json. Source-of-truth rule: plants.json stays authoritative for watering/fertilizer/pests/overwinter; this file ADDS harvest + dated tasks. Dates are MM-DD (local, America/Edmonton). 'year1' flags plants planted 2026 that are establishing — little or no harvest expected this season.",
+  "version": "1.0",
+  "generated": "2026-06-14",
+  "climate_anchors": {
+    "last_spring_frost_avg": "05-07",
+    "frost_possible_until": "06-05",
+    "safe_planting_tender": "05-18",
+    "first_fall_frost_avg": "09-22",
+    "frost_possible_from": "09-05",
+    "frost_free_days": "135-140",
+    "nitrogen_stop_perennials": "08-01",
+    "ground_freeze_mulch_after": "11-01"
+  },
+  "plant_schedules": {
+    "garlic-b5-01": {
+      "harvest": {
+        "window": "Jul 15 – Jul 28",
+        "start": "07-15",
+        "end": "07-28",
+        "year1": false,
+        "signal": "Lift when the lower 3–4 leaves have browned but upper leaves are still green (each green leaf = one bulb wrapper). Don't wait for the whole top to die.",
+        "post_harvest": "Cure whole plants 2–3 weeks in a dry, airy, shaded spot, then trim. Save the biggest bulbs to replant Oct 1–15.",
+        "pre_harvest": "Snap scapes ~late June (one curl) and eat them; stop watering ~2 weeks before lifting so bulbs cure in dry ground."
+      },
+      "spring_prep": [
+        { "window": "Apr", "month": 4, "task": "Garlic shoots push through mulch — pull excess mulch back to bare soil; side-dress with nitrogen ONCE in early spring (last feed of the year)." }
+      ],
+      "fall_winter_prep": [
+        { "window": "Oct 1 – Oct 15", "month": 10, "task": "Replant saved cloves 10–15 cm deep, 15 cm apart, pointy end up; mulch after the ground starts to freeze." }
+      ]
+    },
+    "potato-b4-01": {
+      "harvest": {
+        "window": "New: late Jul · Main: mid-Sep – early Oct",
+        "start": "09-10",
+        "end": "10-05",
+        "year1": false,
+        "signal": "New potatoes ~2–3 weeks after flowering (steal a few). Main crop: wait ~2 weeks AFTER the tops die back so skins set. A light Sept frost on the tops is fine — tubers are safe underground.",
+        "post_harvest": "Cure in the dark 10–14 days at cool temp / high humidity to thicken skins, then store cool and dark. Never store greened (solanine) tubers.",
+        "pre_harvest": "Keep soil evenly moist through flowering (tuber set); hill stems through July so no tubers green."
+      },
+      "spring_prep": [],
+      "fall_winter_prep": [
+        { "window": "Oct", "month": 10, "task": "After harvest, clear all vines and stray tubers from B4 (volunteers harbour disease). Bed is bare for winter." }
+      ]
+    },
+    "kale-b5-01": {
+      "harvest": {
+        "window": "Jun – Nov (under hoop)",
+        "start": "06-15",
+        "end": "11-15",
+        "year1": false,
+        "signal": "Pick outer leaves once they're hand-sized, leaving the central crown to keep producing. Frost makes kale SWEETER — keep harvesting after frosts.",
+        "post_harvest": "Under the B5 hoop tunnel you can cut into November. Done when buried in snow.",
+        "pre_harvest": ""
+      },
+      "spring_prep": [],
+      "fall_winter_prep": [
+        { "window": "Sep – Oct", "month": 9, "task": "Close/seal the hoop tunnel ends on frost nights to push the kale + salad harvest deep into fall." }
+      ]
+    },
+    "salad-b5-01": {
+      "harvest": {
+        "window": "Jun – Oct (cut-and-come-again)",
+        "start": "06-01",
+        "end": "10-31",
+        "year1": false,
+        "signal": "Cut leaves at ~10 cm, leave the growing point — it regrows. Arugula & cilantro bolt in July heat (harvest hard, then re-sow).",
+        "post_harvest": "Under the hoop, harvest into late fall.",
+        "pre_harvest": "Succession-sow a new patch every ~3 weeks for continuous greens."
+      },
+      "spring_prep": [
+        { "window": "early May", "month": 5, "task": "Direct-sow the first salad/arugula/cilantro/lettuce under the hoop — cold-tolerant, goes in before tender crops." }
+      ],
+      "fall_winter_prep": []
+    },
+    "tomato-supremo-b3-01": {
+      "harvest": {
+        "window": "mid-Aug – first frost (~Sep 22)",
+        "start": "08-15",
+        "end": "09-22",
+        "year1": false,
+        "signal": "Romas ripen fully red on the vine Aug–Sep. HARD DEADLINE: strip every fruit, including green, before the first fall frost.",
+        "post_harvest": "Ripen green tomatoes indoors in a paper bag (a ripe apple speeds it). Pull dead plants after harvest.",
+        "pre_harvest": "Even watering prevents blossom-end rot on Romas. Pinch the growing tip ~Aug 20 so the plant ripens what it has."
+      },
+      "spring_prep": [],
+      "fall_winter_prep": [
+        { "window": "first frost", "month": 9, "task": "Annual — harvest all, then compost healthy vines / bag diseased ones. Clear B3." }
+      ]
+    },
+    "tomato-b3-02": {
+      "harvest": {
+        "window": "mid-Aug – first frost (~Sep 22)",
+        "start": "08-15",
+        "end": "09-22",
+        "year1": false,
+        "signal": "Pick as fruit colours up Aug–Sep; strip everything, green included, before the first fall frost.",
+        "post_harvest": "Ripen green fruit indoors in a paper bag.",
+        "pre_harvest": "Cage/stake early; top the plant ~Aug 20 to push ripening."
+      },
+      "spring_prep": [],
+      "fall_winter_prep": [
+        { "window": "first frost", "month": 9, "task": "Annual — harvest all and clear the plants from B3." }
+      ]
+    },
+    "pepper-b2-01": {
+      "harvest": {
+        "window": "mid-Aug – first frost (~Sep 22)",
+        "start": "08-15",
+        "end": "09-22",
+        "year1": false,
+        "signal": "Pick green/coloured as wanted from mid-Aug. Peppers are damaged even at +2 °C — get EVERYTHING in before any frost, no grace period.",
+        "post_harvest": "Green peppers will finish ripening to red indoors on a windowsill.",
+        "pre_harvest": "Steady moisture + calcium to avoid blossom-end rot."
+      },
+      "spring_prep": [],
+      "fall_winter_prep": [
+        { "window": "first frost forecast", "month": 9, "task": "Annual — strip all fruit the day a frost is forecast, then clear B2." }
+      ]
+    },
+    "squash-b3-01": {
+      "harvest": {
+        "window": "late Jul – first frost",
+        "start": "07-25",
+        "end": "09-22",
+        "year1": false,
+        "signal": "If zucchini/summer squash: pick young at 15–20 cm, every 1–2 days — frequent picking keeps it producing. If a winter type: harvest before frost when the rind is hard.",
+        "post_harvest": "Summer squash: use fresh, doesn't store. Winter squash: cure in warmth ~10 days then store cool.",
+        "pre_harvest": "Water at the soil line, not the leaves, to limit powdery mildew."
+      },
+      "spring_prep": [],
+      "fall_winter_prep": [
+        { "window": "first frost", "month": 9, "task": "Annual — harvest, pull the vine, clear B3." }
+      ]
+    },
+    "basil-b3-01": {
+      "harvest": {
+        "window": "Jun – early Sep",
+        "start": "06-15",
+        "end": "09-05",
+        "year1": false,
+        "signal": "Pinch from the top above a leaf pair to keep it bushy; pinch out all flower buds. Most frost-tender plant in the garden — sulks below 10 °C, damaged below ~4 °C.",
+        "post_harvest": "Do a hard harvest (pesto / freeze) before the first cold nights, or pot one plant up and bring it indoors in early Sept.",
+        "pre_harvest": "It is the headline of every frost alert — cover or harvest on any night forecast below ~7 °C."
+      },
+      "spring_prep": [],
+      "fall_winter_prep": [
+        { "window": "nights < 7 °C (early Sep)", "month": 9, "task": "Annual — harvest hard or bring one potted plant inside before the first cold snap." }
+      ]
+    },
+    "chives-b3-01": {
+      "harvest": {
+        "window": "May – Oct",
+        "start": "05-01",
+        "end": "10-15",
+        "year1": false,
+        "signal": "Snip leaves anytime. After it flowers, shear the whole clump to 5 cm for a flush of fresh tender regrowth.",
+        "post_harvest": "Bulletproof zone-3 perennial — comes back every year.",
+        "pre_harvest": ""
+      },
+      "spring_prep": [
+        { "window": "Apr", "month": 4, "task": "First fresh chives of the year emerge — top-dress with compost, no other feeding needed." }
+      ],
+      "fall_winter_prep": [
+        { "window": "n/a", "month": 11, "task": "Fully hardy — nothing to do. Dies back, returns in spring." }
+      ]
+    },
+    "strawberry-b1-01": {
+      "harvest": {
+        "window": "late Jun – Jul (+ Sep flush if everbearing)",
+        "start": "06-25",
+        "end": "07-20",
+        "year1": false,
+        "signal": "June-bearing: one big 2–3 week crop late June–July. Everbearing/day-neutral: June crop + a second flush in September. Pick fully red, every 1–2 days; net against birds.",
+        "post_harvest": "June-bearing: feed a balanced fertilizer right AFTER the crop finishes. Pinch runners to keep energy in the fruiting crowns.",
+        "pre_harvest": "Steady moisture during fruiting; straw/mulch under berries keeps them clean and slug-free."
+      },
+      "spring_prep": [
+        { "window": "mid–late Apr", "month": 4, "task": "Pull winter straw off the crowns once snow is gone and growth starts; check for new green. Re-lay a thin clean mulch in early May to keep fruit off soil." }
+      ],
+      "fall_winter_prep": [
+        { "window": "after ground freeze (~early Nov)", "month": 11, "task": "Cover crowns with 5–10 cm clean straw AFTER the ground freezes; pull it back in April." }
+      ]
+    },
+    "blackberry-b1-01": {
+      "harvest": {
+        "window": "Aug (once established)",
+        "start": "08-01",
+        "end": "08-31",
+        "year1": true,
+        "signal": "Floricane type — fruits on canes that overwintered. THIS year's new canes fruit NEXT year, so 2026 yield is light/none. Berries are ripe when dull-black and pull free easily.",
+        "post_harvest": "Whether you get fruit depends entirely on winter cane survival — see the burial task below.",
+        "pre_harvest": "Consistent moisture during fruiting."
+      },
+      "spring_prep": [
+        { "window": "mid-Apr", "month": 4, "task": "Uncover the buried canes once hard frost risk eases, lift and tie them back to the support, prune any winter-killed (brown, brittle) wood to live tissue." }
+      ],
+      "fall_winter_prep": [
+        { "window": "late Oct (after a few hard frosts)", "month": 10, "task": "Bend canes to the ground, pin, and bury under 15–20 cm of leaves/mulch (snow on top is ideal). Cane survival = next year's harvest." }
+      ]
+    },
+    "boysenberry-b1-01": {
+      "harvest": {
+        "window": "Aug (once established)",
+        "start": "08-01",
+        "end": "08-31",
+        "year1": true,
+        "signal": "Most tender bramble here (zone 5–6). Floricane type — light/no fruit in 2026; berries ripe when deep maroon-black and soft.",
+        "post_harvest": "Harvest hinges on near-perfect cane burial — exposed canes die around −20 °C.",
+        "pre_harvest": "Watch for chlorosis (yellow leaf / green veins) — alkaline soil; treat with chelated iron."
+      },
+      "spring_prep": [
+        { "window": "mid-Apr", "month": 4, "task": "Uncover and retie canes like the blackberry; prune winter-killed wood." }
+      ],
+      "fall_winter_prep": [
+        { "window": "late Oct", "month": 10, "task": "Bury canes completely — MORE critical than the blackberry. Add an extra straw layer." }
+      ]
+    },
+    "cherry-b1-01": {
+      "harvest": {
+        "window": "late Jul – Aug (when mature)",
+        "start": "07-20",
+        "end": "08-20",
+        "year1": true,
+        "signal": "First season — establishing, no harvest expected. A mature sour/Evans-type cherry ripens dark red late July–August; net against birds.",
+        "post_harvest": "Variety is unconfirmed — sour/Romance-series survive Edmonton; a sweet cherry likely won't.",
+        "pre_harvest": "Deep weekly soak this first season to establish roots."
+      },
+      "spring_prep": [
+        { "window": "Apr", "month": 4, "task": "Inspect for black-knot galls and winter dieback; prune out any black knots 15–20 cm below the gall and burn the prunings." }
+      ],
+      "fall_winter_prep": [
+        { "window": "late Oct → early Nov", "month": 10, "task": "Deep-water before freeze-up; mulch the root zone AFTER the ground freezes; put a rodent guard on the trunk. Add burlap if it proves to be a sweet cherry." }
+      ]
+    },
+    "fig-olympian-p1-01": {
+      "harvest": {
+        "window": "late Sep (small main crop, if any)",
+        "start": "09-10",
+        "end": "10-05",
+        "year1": true,
+        "signal": "Rebuilding from winter dieback this year. Olympian fruits on NEW wood (main crop) — a short Edmonton season ripens few, if any, in a recovery year. Ripe figs droop on the stem and soften.",
+        "post_harvest": "Long term, expect a modest main crop in warm years once the plant has size.",
+        "pre_harvest": "Don't let potted figs dry out — drought stress drops fruit."
+      },
+      "spring_prep": [
+        { "window": "late Apr – early May", "month": 5, "task": "Bring pots out of the garage after hard frosts pass; place in shade first, then add sun over 7–10 days to avoid sunscald. Spring pruning is fine (fruits on new wood)." }
+      ],
+      "fall_winter_prep": [
+        { "window": "late Sep – Oct", "month": 10, "task": "Let a light frost trigger leaf drop/dormancy, then move pots to the garage at 0–7 °C; water barely-moist ~monthly. NEVER plant in ground in Edmonton." }
+      ]
+    },
+    "blueberry-p1-01": {
+      "harvest": {
+        "window": "late Jul – Aug (when mature)",
+        "start": "07-25",
+        "end": "08-25",
+        "year1": true,
+        "signal": "Establishing in its acid pot this year. Mature highbush ripens late July–Aug; pick when fully blue and they roll off into your hand. Net against birds.",
+        "post_harvest": "Keep it potted forever — Edmonton ground pH 7.5–8 will kill it.",
+        "pre_harvest": "Use rainwater (tap water is alkaline). Yellow leaf / green veins = pH creeping up → add sulphur / chelated iron."
+      },
+      "spring_prep": [
+        { "window": "late Apr – early May", "month": 5, "task": "Bring the pot out of winter storage after hard frost; top up acidic peat mix; first acid feed." }
+      ],
+      "fall_winter_prep": [
+        { "window": "late Oct (after dormancy)", "month": 10, "task": "Overwinter the POT in an unheated garage (or buried/heavily mulched against the house). It needs winter chill — do not keep warm." }
+      ]
+    },
+    "grape-p1-01": {
+      "harvest": {
+        "window": "Sep – Oct (when mature)",
+        "start": "09-10",
+        "end": "10-10",
+        "year1": true,
+        "signal": "Establishing — no harvest year 1. Hardy prairie grapes (Valiant/Frontenac) ripen Sep–Oct; taste-test for sweetness, don't go by colour alone.",
+        "post_harvest": "Variety decides everything: Valiant/Beta/Frontenac can go in-ground & cane-bury; a table grape stays potted & tender.",
+        "pre_harvest": "Go easy on feeding — overfeeding makes vine, not fruit."
+      },
+      "spring_prep": [
+        { "window": "late Apr – early May", "month": 5, "task": "Bring pot out after hard frost; prune while still dormant (grapes bleed if pruned late)." }
+      ],
+      "fall_winter_prep": [
+        { "window": "after leaf drop, late Oct", "month": 10, "task": "Dormant pot into the garage like the figs until the variety/hardiness is confirmed." }
+      ]
+    },
+    "unknown-woody-b3-01": {
+      "harvest": {
+        "window": "TBD — ID needed",
+        "start": null,
+        "end": null,
+        "year1": true,
+        "signal": "Unidentified resprouts (goji? haskap?). If haskap: ripe late June–early July (one of the earliest berries). If goji: ripens late summer–fall. ID before counting on a harvest.",
+        "post_harvest": "Both goji (z3) and haskap (z2) are bombproof here — no winter protection needed once ID'd.",
+        "pre_harvest": "Prune the dead winter tops back to live wood; send a leaf close-up for ID when growth fills in."
+      },
+      "spring_prep": [
+        { "window": "Apr – May", "month": 4, "task": "Prune dead tops to the live chartreuse regrowth; firm soil over any exposed roots." }
+      ],
+      "fall_winter_prep": [
+        { "window": "n/a", "month": 11, "task": "If goji or haskap, fully hardy — leave it. Confirm ID first." }
+      ]
+    },
+    "seedlings-b6-01": {
+      "harvest": {
+        "window": "TBD — resolve crop vs weed first",
+        "start": null,
+        "end": null,
+        "year1": true,
+        "signal": "Photo review verdict: compost weed flush (smartweed/lady's-thumb-like), not a sown crop. No harvest.",
+        "post_harvest": "",
+        "pre_harvest": "Shallow-hoe the bed now while seedlings are tiny; spare any scattered beet/chard or dill-like crop seedlings."
+      },
+      "spring_prep": [],
+      "fall_winter_prep": []
+    }
+  },
+  "calendar": [
+    { "id": "apr-uncover", "category": "spring_prep", "start": "04-15", "end": "04-30", "title": "Uncover overwintered plants", "detail": "Pull winter straw off strawberry crowns and back from perennials once snow is gone. Unbury & retie bramble canes (blackberry, boysenberry). Prune winter-killed wood to live tissue. Check cherry for black knot.", "zones": ["B1"], "plant_ids": ["strawberry-b1-01", "blackberry-b1-01", "boysenberry-b1-01", "cherry-b1-01"] },
+    { "id": "apr-garlic", "category": "spring_prep", "start": "04-15", "end": "04-30", "title": "Garlic emerges — last feed", "detail": "Garlic shoots push through the mulch. Pull excess mulch to bare soil and give the ONE nitrogen feed of its year (none after, or bulbs stay small).", "zones": ["B5"], "plant_ids": ["garlic-b5-01"] },
+    { "id": "may-pots-out", "category": "spring_prep", "start": "04-28", "end": "05-12", "title": "Bring potted tender plants out of the garage", "detail": "After hard frosts ease, move figs, blueberry and grape out of winter storage. Shade first, then add sun over 7–10 days to prevent sunscald. Prune grape & fig while still dormant.", "zones": ["P1"], "plant_ids": ["fig-olympian-p1-01", "blueberry-p1-01", "grape-p1-01"] },
+    { "id": "may-soil", "category": "spring_prep", "start": "05-01", "end": "05-15", "title": "Soil prep & cool-crop sowing", "detail": "Work compost into beds once soil hits ~10 °C. Direct-sow salad greens, arugula, cilantro, lettuce under the B5 hoop. Plant potatoes early–mid May.", "zones": ["B4", "B5"], "plant_ids": ["salad-b5-01", "potato-b4-01"] },
+    { "id": "may-frostcloth", "category": "spring_prep", "start": "05-01", "end": "06-05", "title": "Frost cloth on standby", "detail": "Average last frost is May 7 but frost can strike into early June. Keep frost cloth ready for tender transplants; the safe tender-planting date is the May long weekend (~May 18).", "zones": ["B2", "B3"], "plant_ids": ["tomato-supremo-b3-01", "tomato-b3-02", "pepper-b2-01", "basil-b3-01", "squash-b3-01"] },
+    { "id": "may-firstfeed", "category": "fertilize", "start": "05-12", "end": "05-25", "title": "First feed of perennials & shrubs", "detail": "As growth starts, give strawberries, brambles and (year 2+) cherry their balanced spring feed. Start figs on half-strength 10-10-10 and blueberry on ACID fertilizer only.", "zones": ["B1", "P1"], "plant_ids": ["strawberry-b1-01", "blackberry-b1-01", "boysenberry-b1-01", "fig-olympian-p1-01", "blueberry-p1-01", "grape-p1-01"] },
+    { "id": "jun-scapes", "category": "harvest", "start": "06-20", "end": "07-05", "title": "Snap garlic scapes", "detail": "Cut/snap scapes after one curl (before they straighten) so energy goes to the bulb — leaving them can cut bulb size ~30%. Eat them (garlic-scape pesto).", "zones": ["B5"], "plant_ids": ["garlic-b5-01"] },
+    { "id": "jun-bramble-stop", "category": "fertilize", "start": "06-10", "end": "06-20", "title": "Bramble mid-June feed (last one)", "detail": "Light second feed for blackberry & boysenberry. HARD STOP all bramble nitrogen by July 31.", "zones": ["B1"], "plant_ids": ["blackberry-b1-01", "boysenberry-b1-01"] },
+    { "id": "jun-strawberry", "category": "harvest", "start": "06-25", "end": "07-20", "title": "Strawberry harvest", "detail": "Main crop late June–July. Pick fully red every 1–2 days, net against birds. Feed June-bearing types right after the crop finishes; pinch runners.", "zones": ["B1"], "plant_ids": ["strawberry-b1-01"] },
+    { "id": "jul-garlic-water-stop", "category": "harvest", "start": "07-01", "end": "07-10", "title": "Stop watering garlic", "detail": "About 2 weeks before lifting, stop watering B5 garlic so the bulbs cure in dry ground.", "zones": ["B5"], "plant_ids": ["garlic-b5-01"] },
+    { "id": "jul-garlic-harvest", "category": "harvest", "start": "07-15", "end": "07-28", "title": "Harvest garlic", "detail": "Lift when the lower 3–4 leaves brown but the top stays green. Cure whole plants 2–3 weeks in shade; save the biggest bulbs for October replanting.", "zones": ["B5"], "plant_ids": ["garlic-b5-01"] },
+    { "id": "jul-fruitset", "category": "fertilize", "start": "07-01", "end": "07-20", "title": "Fruit-set feed for fruiting veg", "detail": "Switch tomatoes, peppers and squash to a bloom/fruit fertilizer (5-10-10) at first fruit set; add calcium for peppers/tomatoes to prevent blossom-end rot.", "zones": ["B2", "B3"], "plant_ids": ["tomato-supremo-b3-01", "tomato-b3-02", "pepper-b2-01", "squash-b3-01"] },
+    { "id": "jul-squash", "category": "harvest", "start": "07-25", "end": "09-22", "title": "Summer squash / zucchini harvest", "detail": "Pick young (15–20 cm) every 1–2 days to keep production going.", "zones": ["B3"], "plant_ids": ["squash-b3-01"] },
+    { "id": "aug-n-stop", "category": "winter_prep", "start": "08-01", "end": "08-01", "title": "STOP nitrogen on perennials, shrubs & trees", "detail": "Hard cutoff — late feeding pushes soft growth that winter-kills. Applies to brambles, strawberries, cherry, figs, blueberry, grape. Vegetables can keep feeding.", "zones": ["B1", "P1"], "plant_ids": ["blackberry-b1-01", "boysenberry-b1-01", "strawberry-b1-01", "cherry-b1-01", "fig-olympian-p1-01", "blueberry-p1-01", "grape-p1-01"] },
+    { "id": "aug-tomato", "category": "harvest", "start": "08-15", "end": "09-22", "title": "Tomato & pepper harvest", "detail": "Pick as fruit colours up. Top tomato plants ~Aug 20 to push ripening. Strip EVERYTHING (green included) before the first fall frost.", "zones": ["B2", "B3"], "plant_ids": ["tomato-supremo-b3-01", "tomato-b3-02", "pepper-b2-01"] },
+    { "id": "aug-overwinter-window", "category": "winter_prep", "start": "08-15", "end": "08-31", "title": "Overwintering planning window opens", "detail": "Run the overwintering skill for the per-plant dig-up / bring-in / cover / mulch checklist. Line up garage space for the pots and straw for the beds.", "zones": ["P1", "B1"], "plant_ids": [] },
+    { "id": "sep-basil", "category": "harvest", "start": "09-01", "end": "09-10", "title": "Hard-harvest basil before cold nights", "detail": "Basil sulks below 10 °C and is damaged below ~4 °C. Make pesto / freeze it, or pot one plant up and bring it indoors when nights drop below ~7 °C.", "zones": ["B3"], "plant_ids": ["basil-b3-01"] },
+    { "id": "sep-frost-watch", "category": "winter_prep", "start": "09-05", "end": "09-30", "title": "First-frost watch — cover to extend season", "detail": "First fall frost averages Sept 22 but can hit early September. One early frost is usually followed by 2–3 more good weeks — covering tender crops that one night buys real harvest. Basil/tomato/pepper/squash are the priorities.", "zones": ["B2", "B3"], "plant_ids": ["basil-b3-01", "tomato-supremo-b3-01", "tomato-b3-02", "pepper-b2-01", "squash-b3-01"] },
+    { "id": "sep-potato", "category": "harvest", "start": "09-10", "end": "10-05", "title": "Harvest & cure potatoes", "detail": "Wait ~2 weeks after the tops die back, then dig. Cure in the dark 10–14 days (cool, humid) to set skins; store cool & dark. Light frost on the tops is fine.", "zones": ["B4"], "plant_ids": ["potato-b4-01"] },
+    { "id": "sep-hoop", "category": "winter_prep", "start": "09-15", "end": "10-31", "title": "Run the hoop tunnel for fall greens", "detail": "Seal the B5 hoop ends on frost nights to carry kale + salad into November. Frost sweetens the kale.", "zones": ["B5"], "plant_ids": ["kale-b5-01", "salad-b5-01"] },
+    { "id": "oct-garlic-plant", "category": "winter_prep", "start": "10-01", "end": "10-15", "title": "Replant garlic", "detail": "Plant the saved biggest cloves 10–15 cm deep, 15 cm apart, pointy end up. Mulch once the ground starts to freeze.", "zones": ["B5"], "plant_ids": ["garlic-b5-01"] },
+    { "id": "oct-pots-in", "category": "winter_prep", "start": "10-01", "end": "10-25", "title": "Move tender pots to the garage", "detail": "Let a light frost trigger fig leaf-drop, then move figs, blueberry and grape pots to the unheated garage (0–7 °C). Water barely-moist ~monthly. They need cold — do not keep warm.", "zones": ["P1"], "plant_ids": ["fig-olympian-p1-01", "blueberry-p1-01", "grape-p1-01"] },
+    { "id": "oct-bramble-bury", "category": "winter_prep", "start": "10-20", "end": "11-05", "title": "Bury bramble canes", "detail": "After a few hard frosts, bend canes down, pin, and bury under 15–20 cm of leaves/mulch (snow on top is ideal). Boysenberry needs an extra straw layer. Cane survival = next year's berries.", "zones": ["B1"], "plant_ids": ["blackberry-b1-01", "boysenberry-b1-01"] },
+    { "id": "oct-deepwater", "category": "winter_prep", "start": "10-20", "end": "10-31", "title": "Deep water before freeze-up", "detail": "Give the cherry and any shrubs a deep late-October soak before the ground freezes. Blow out drip lines (B3/B4/B5) so they don't split.", "zones": ["B1", "B3", "B4", "B5"], "plant_ids": ["cherry-b1-01"] },
+    { "id": "nov-mulch", "category": "winter_prep", "start": "11-01", "end": "11-15", "title": "Mulch AFTER the ground freezes", "detail": "Once the ground is frozen, lay 5–10 cm clean straw over strawberry crowns and mulch the cherry root zone + rodent guard. Mulching after freeze keeps the ground frozen through chinooks (freeze-thaw is the killer). Snow cover is the best insulator.", "zones": ["B1"], "plant_ids": ["strawberry-b1-01", "cherry-b1-01"] },
+    { "id": "nov-kale-last", "category": "harvest", "start": "11-01", "end": "11-30", "title": "Last kale & greens under the hoop", "detail": "Keep harvesting kale and hardy greens from the hoop tunnel until they're buried in snow.", "zones": ["B5"], "plant_ids": ["kale-b5-01", "salad-b5-01"] }
+  ]
+}

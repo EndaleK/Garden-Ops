@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Plant record",
+  "type": "object",
+  "required": ["plant_id", "common_name", "zone_id", "type", "water", "overwinter"],
+  "properties": {
+    "plant_id": { "type": "string", "description": "slug, e.g. tomato-z2-01" },
+    "common_name": { "type": "string" },
+    "species": { "type": "string", "description": "Latin name if known" },
+    "cultivar": { "type": "string" },
+    "zone_id": { "type": "string", "description": "must exist in zones.json" },
+    "type": { "enum": ["annual", "perennial", "shrub", "tree", "vegetable", "herb", "bulb_tender", "bulb_hardy", "tropical_potted"] },
+    "quantity": { "type": "integer", "default": 1 },
+    "planted_date": { "type": "string", "format": "date" },
+    "photo": { "type": "string", "description": "path under photos/" },
+    "hardiness": { "type": "string", "description": "e.g. zone 3, zone 4, tender" },
+    "sun": { "enum": ["full_sun", "part_sun", "shade"] },
+    "water": {
+      "type": "object",
+      "required": ["weekly_mm"],
+      "properties": {
+        "weekly_mm": { "type": "number", "description": "baseline water need per week in mm (rain-equivalent); tomatoes ~30-40, established perennials ~20-25" },
+        "drought_tolerant": { "type": "boolean" },
+        "notes": { "type": "string" }
+      }
+    },
+    "fertilizer": {
+      "type": "object",
+      "properties": {
+        "npk_preference": { "type": "string", "description": "e.g. balanced 10-10-10, bloom 15-30-15" },
+        "interval_days": { "type": "integer" },
+        "season": { "type": "string", "description": "e.g. May-Aug; stop feeding perennials by Aug 1 to harden off" }
+      }
+    },
+    "pests": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "pest": { "type": "string" },
+          "watch_window": { "type": "string", "description": "e.g. June-July" },
+          "ipm_first": { "type": "string", "description": "least-toxic control" },
+          "chemical_option": { "type": "string" }
+        }
+      }
+    },
+    "frost_tolerance_c": { "type": ["number", "null"], "description": "temp at which protection is needed; 0 for tomatoes/basil, -2 for cool crops, null for hardy" },
+    "overwinter": {
+      "type": "object",
+      "required": ["strategy"],
+      "properties": {
+        "strategy": { "enum": ["hardy_leave", "mulch_protect", "cover_on_frost", "dig_and_store", "bring_indoors", "annual_dies"] },
+        "trigger": { "type": "string", "description": "e.g. 'before first frost', 'after foliage dies back', 'night temps < 10C'" },
+        "instructions": { "type": "string" }
+      }
+    },
+    "notes": { "type": "string" }
+  }
+}
