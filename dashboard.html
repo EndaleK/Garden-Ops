@@ -933,6 +933,39 @@ function onMgFocusout(e){var inp=e.target.closest('[data-field=pname]');if(inp){
 /* ---------- build garden from a photo (uses the Diagnose tab's AI provider) ---------- */
 let SCAN_IMGS=[],SCAN_RESULT=null;const SCAN_MAX=6;
 const SCAN_PROMPT_CLIENT="You are helping a gardener inventory their garden from one or more photos. The photos may show the SAME garden from different angles, or different beds — merge them into a single inventory and do NOT double-count a bed or plant that appears in more than one photo. Identify the distinct garden beds, raised beds, rows, or containers, and the plants growing in each. Respond with ONLY a JSON object in exactly this shape, no prose and no code fences:\n{\"beds\":[{\"name\":\"short label, e.g. Raised bed (left)\",\"plants\":[{\"name\":\"common plant name, e.g. Tomato\",\"qty\":1}]}]}\nUse common single plant names. Estimate qty as a small integer. If you cannot identify a plant, give your best one-word guess. If no garden or plants are visible, return {\"beds\":[]}.";
+/* Shrink + re-encode a photo in the browser before upload. Phone photos are 3–8 MB;
+   the hosted proxy (Vercel) rejects request bodies over ~4.5 MB with a 413. A 1280px
+   JPEG is ~200–400 KB, well under the cap, and is plenty of detail for the vision model
+   (smaller = faster + cheaper too). Falls back to the raw file if canvas isn't available. */
+function downscaleImg(file,maxDim,quality){
+  return new Promise(function(resolve){
+    maxDim=maxDim||1280;quality=quality||0.72;
+    var done=false;function finish(v){if(done)return;done=true;resolve(v);}
+    var fr=new FileReader();
+    fr.onerror=function(){finish(null);};
+    fr.onload=function(){
+      var url=fr.result;var raw={mime:file.type||'image/jpeg',b64:String(url).split(',')[1]||'',dataurl:url};
+      var t=setTimeout(function(){finish(raw);},4000); // safety: never hang the UI on a bad image
+      var img=new Image();
+      img.onload=function(){clearTimeout(t);
+        try{
+          var w=img.naturalWidth||img.width,h=img.naturalHeight||img.height;
+          if(!w||!h){finish(raw);return;}
+          var s=Math.min(1,maxDim/Math.max(w,h));
+          var cw=Math.max(1,Math.round(w*s)),ch=Math.max(1,Math.round(h*s));
+          var cv=document.createElement('canvas');cv.width=cw;cv.height=ch;
+          cv.getContext('2d').drawImage(img,0,0,cw,ch);
+          var out=cv.toDataURL('image/jpeg',quality);
+          if(out&&out.indexOf('data:image/jpeg')===0&&out.length>64)finish({mime:'image/jpeg',b64:out.split(',')[1],dataurl:out});
+          else finish(raw);
+        }catch(e){finish(raw);}
+      };
+      img.onerror=function(){clearTimeout(t);finish(raw);};
+      img.src=url;
+    };
+    fr.readAsDataURL(file);
+  });
+}
 function renderScanThumbs(pw){
   pw=pw||document.querySelector('#app [data-scanprev]');if(!pw)return;
   if(!SCAN_IMGS.length){pw.innerHTML='';return;}
@@ -940,15 +973,15 @@ function renderScanThumbs(pw){
     '<div class="scancount">'+SCAN_IMGS.length+' photo'+(SCAN_IMGS.length>1?'s':'')+' added'+(SCAN_IMGS.length>=SCAN_MAX?' (max)':' — add more angles for a better read')+'.</div>';
 }
 function loadScanImgs(files,pw){
-  const list=Array.prototype.slice.call(files||[]);let pending=0;
-  list.forEach(function(f){
-    if(SCAN_IMGS.length+pending>=SCAN_MAX||!/^image\//.test(f.type||''))return;
-    pending++;const rd=new FileReader();
-    rd.onload=function(){SCAN_IMGS.push({mime:f.type||'image/jpeg',b64:String(rd.result).split(',')[1],dataurl:rd.result});pending--;if(pending===0)renderScanThumbs(pw);};
-    rd.onerror=function(){pending--;if(pending===0)renderScanThumbs(pw);};
-    rd.readAsDataURL(f);
+  pw=pw||document.querySelector('#app [data-scanprev]');
+  var list=Array.prototype.slice.call(files||[]).filter(function(f){return /^image\//.test(f.type||'');});
+  var room=SCAN_MAX-SCAN_IMGS.length;if(room<=0){renderScanThumbs(pw);return;}
+  list=list.slice(0,room);if(!list.length){renderScanThumbs(pw);return;}
+  if(pw)pw.insertAdjacentHTML('beforeend','<div class="scancount" data-scanwait>Preparing '+list.length+' photo'+(list.length>1?'s':'')+'…</div>');
+  Promise.all(list.map(function(f){return downscaleImg(f,1280,0.72);})).then(function(results){
+    results.forEach(function(r){if(r&&r.b64&&SCAN_IMGS.length<SCAN_MAX)SCAN_IMGS.push({mime:r.mime,b64:r.b64,dataurl:r.dataurl});});
+    renderScanThumbs(pw);
   });
-  if(pending===0)renderScanThumbs(pw);
 }
 function parseScan(t){
   if(!t)return {beds:[]};
@@ -959,7 +992,8 @@ function parseScan(t){
 async function aiScan(provider,model,key,imgs){
   if(provider==='hosted'){
     const r=await fetch((window.GARDEN_DIAG_PROXY||'/api/diagnose'),{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({mode:'scan',images:imgs.map(function(x){return {mime:x.mime,b64:x.b64};})})});
-    let j;try{j=await r.json();}catch(e){throw new Error('Hosted scanner not reachable — it works on the published site. Locally, pick Claude or Gemini in the Diagnose tab.');}
+    if(r.status===413)throw new Error('Photos are too large for the hosted scanner. They’re auto-shrunk before upload now — try once more, or use fewer photos.');
+    let j;try{j=await r.json();}catch(e){var e2=new Error('Hosted scanner not reachable.');e2.local=true;throw e2;}
     if(!r.ok)throw new Error(j.error||('Proxy HTTP '+r.status));return parseScan(j.text);
   }
   if(provider==='claude'){
@@ -992,12 +1026,14 @@ function runScan(){
   }).catch(function(err){
     if(st)st.textContent='';
     if(!out)return;
-    if(AICFG.provider==='hosted'){
+    var msg=(err&&err.message)||String(err);
+    var unreachable=(err&&err.local)|| /failed to fetch|networkerror|load failed|not reachable/i.test(msg);
+    if(AICFG.provider==='hosted'&&unreachable){
       out.innerHTML='<div class="card" style="margin-top:4px;padding:12px 14px;background:var(--inset)">'+
         '<p class="mut" style="margin:0 0 8px">The hosted scanner isn’t reachable here (it runs on the published site). To scan right now, paste a free <b>Google Gemini</b> key — it stays in your browser.</p>'+
         '<div class="row"><input class="in" type="password" data-scankey placeholder="Gemini API key" style="min-width:240px"><button class="btn" data-act="scankey">Use key &amp; scan</button></div>'+
         '<p class="mut" style="font-size:12px;margin-top:6px">Get one free at <b>aistudio.google.com/apikey</b>. Or just push to the live site, where it needs no key.</p></div>';
-    } else { out.innerHTML='<p class="mut">Error: '+esc(err.message||String(err))+'</p>'; }
+    } else { out.innerHTML='<p class="mut">Error: '+esc(msg)+'</p>'; }
   });
 }
 function applyScan(){
@@ -1186,9 +1222,12 @@ function paneDiagnose(){
 }
 function saveAICfg(){try{localStorage.setItem('gardenAICfg',JSON.stringify(AICFG));}catch(e){}}
 function loadImg(f,pw){
-  const rd=new FileReader();
-  rd.onload=()=>{const url=rd.result;DIAG_IMG={mime:f.type||'image/jpeg',b64:String(url).split(',')[1],dataurl:url};pw.innerHTML='<img class="prev" src="'+url+'" alt="plant photo">';};
-  rd.readAsDataURL(f);
+  if(pw)pw.innerHTML='<p class="mut" style="margin:6px 0">Preparing photo…</p>';
+  downscaleImg(f,1280,0.72).then(function(r){
+    if(!r||!r.b64){if(pw)pw.innerHTML='<p class="mut">Could not read that image — try another.</p>';return;}
+    DIAG_IMG={mime:r.mime,b64:r.b64,dataurl:r.dataurl};
+    if(pw)pw.innerHTML='<img class="prev" src="'+r.dataurl+'" alt="plant photo">';
+  });
 }
 async function runDiagnose(el){
   const st=el.querySelector('[data-status]'),out=el.querySelector('[data-out]');
@@ -1210,6 +1249,7 @@ async function aiDiagnose(provider,model,key,mime,b64,ctx){
     // Hosted secure proxy — the vision key lives server-side (Vercel env, e.g. GEMINI_API_KEY), never in the browser.
     const r=await fetch((window.GARDEN_DIAG_PROXY||'/api/diagnose'),{method:'POST',headers:{'content-type':'application/json'},
       body:JSON.stringify({mime:mime,b64:b64,notes:ctx||''})});
+    if(r.status===413)throw new Error('Photo is too large for the hosted proxy. It’s auto-shrunk before upload now — try once more.');
     let j;try{j=await r.json();}catch(e){throw new Error('Hosted proxy not reachable — it works on the published site. Locally, pick Claude or Gemini with your own key.');}
     if(!r.ok)throw new Error(j.error||('Proxy HTTP '+r.status));
     return (j.text||'(no response)').trim();
