@@ -989,7 +989,16 @@ function runScan(){
     const np=beds.reduce(function(s,b){return s+((b.plants||[]).length);},0);
     const list=beds.map(function(b){var pl=(b.plants||[]).map(function(p){return esc(p.name||'?')+((+p.qty>1)?' ×'+(+p.qty):'');}).join(', ')||'no plants detected';return '<div class="scanbed"><b>'+esc(b.name||'Bed')+'</b><div class="mut">'+pl+'</div></div>';}).join('');
     if(out)out.innerHTML=list+'<div style="margin-top:11px"><button class="btn" data-act="applyscan">Add '+beds.length+' bed'+(beds.length>1?'s':'')+' &amp; '+np+' plant'+(np!==1?'s':'')+' to my garden</button> <span class="mut" style="font-size:12px">Rename or adjust anything after.</span></div>';
-  }).catch(function(err){if(st)st.textContent='Error: '+(err.message||err);});
+  }).catch(function(err){
+    if(st)st.textContent='';
+    if(!out)return;
+    if(AICFG.provider==='hosted'){
+      out.innerHTML='<div class="card" style="margin-top:4px;padding:12px 14px;background:var(--inset)">'+
+        '<p class="mut" style="margin:0 0 8px">The hosted scanner isn’t reachable here (it runs on the published site). To scan right now, paste a free <b>Google Gemini</b> key — it stays in your browser.</p>'+
+        '<div class="row"><input class="in" type="password" data-scankey placeholder="Gemini API key" style="min-width:240px"><button class="btn" data-act="scankey">Use key &amp; scan</button></div>'+
+        '<p class="mut" style="font-size:12px;margin-top:6px">Get one free at <b>aistudio.google.com/apikey</b>. Or just push to the live site, where it needs no key.</p></div>';
+    } else { out.innerHTML='<p class="mut">Error: '+esc(err.message||String(err))+'</p>'; }
+  });
 }
 function applyScan(){
   const beds=(SCAN_RESULT&&SCAN_RESULT.beds)||[];if(!beds.length)return;
@@ -1083,6 +1092,7 @@ function onMgClick(e){
   else if(act==='scan'){runScan();}
   else if(act==='applyscan'){applyScan();}
   else if(act==='rmscanimg'){SCAN_IMGS.splice(+id,1);renderScanThumbs();}
+  else if(act==='scankey'){var ki=mgRoot()&&mgRoot().querySelector('[data-scankey]');var k=ki&&(ki.value||'').trim();if(k){AICFG.provider='gemini';AICFG.key=k;if(AICFG.remember&&typeof saveAICfg==='function')saveAICfg();runScan();}}
   else if(act==='delplant'){const[bid,idx]=id.split(':');const b=USERCFG.beds.find(b=>b.id===bid);if(b){b.plants.splice(+idx,1);saveCfg();rerenderCurrent();}}
 }
 function onMgChange(e){
