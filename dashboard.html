@@ -819,6 +819,8 @@ html[data-theme="night"] .wxa.warn b{color:var(--amber-bri)}
 .qchip{font-family:var(--font-ui);font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--line2);background:var(--inset);color:var(--ink-soft);border-radius:999px;padding:4px 11px}
 .qchip:hover{border-color:var(--forest2);color:var(--forest2)}
 .savednote{font-size:12px;color:var(--ink-dim);margin-top:12px}
+.scanbed{padding:8px 0;border-top:1px dashed var(--line)}
+.scanbed:first-child{border-top:none;padding-top:2px}
 .aiout b{color:var(--forest2)}
 .warnote{font-size:12px;color:var(--ink-dim);margin-top:8px}
 /* fertilizer/pest guide (scoped) */
@@ -893,6 +895,54 @@ function plantCategoryFromName(name){
 }
 function addNamedPlant(b,name){b.plants.push({type:plantCategoryFromName(name)||'leafy',name:name,qty:1});saveCfg();rerenderCurrent();}
 
+/* ---------- build garden from a photo (uses the Diagnose tab's AI provider) ---------- */
+let SCAN_IMG=null,SCAN_RESULT=null;
+const SCAN_PROMPT_CLIENT="You are helping a gardener inventory their garden from a photo. Identify the distinct garden beds, raised beds, rows, or containers visible, and the plants growing in each. Respond with ONLY a JSON object in exactly this shape, no prose and no code fences:\n{\"beds\":[{\"name\":\"short label, e.g. Raised bed (left)\",\"plants\":[{\"name\":\"common plant name, e.g. Tomato\",\"qty\":1}]}]}\nUse common single plant names. Estimate qty as a small integer. If you cannot identify a plant, give your best one-word guess. If no garden or plants are visible, return {\"beds\":[]}.";
+function loadScanImg(f,pw){const rd=new FileReader();rd.onload=function(){const url=rd.result;SCAN_IMG={mime:f.type||'image/jpeg',b64:String(url).split(',')[1]};if(pw)pw.innerHTML='<img class="prev" src="'+url+'" alt="garden photo">';};rd.readAsDataURL(f);}
+function parseScan(t){
+  if(!t)return {beds:[]};
+  let s=String(t).trim().replace(/^```[a-z]*\s*/i,'').replace(/```\s*$/,'').trim();
+  const a=s.indexOf('{'),b=s.lastIndexOf('}');if(a>=0&&b>a)s=s.slice(a,b+1);
+  try{const o=JSON.parse(s);return (o&&Array.isArray(o.beds))?o:{beds:[]};}catch(e){return {beds:[]};}
+}
+async function aiScan(provider,model,key,mime,b64){
+  if(provider==='hosted'){
+    const r=await fetch((window.GARDEN_DIAG_PROXY||'/api/diagnose'),{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({mode:'scan',mime:mime,b64:b64})});
+    let j;try{j=await r.json();}catch(e){throw new Error('Hosted scanner not reachable — it works on the published site. Locally, pick Claude or Gemini in the Diagnose tab.');}
+    if(!r.ok)throw new Error(j.error||('Proxy HTTP '+r.status));return parseScan(j.text);
+  }
+  if(provider==='claude'){
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true','content-type':'application/json'},body:JSON.stringify({model:model||'claude-sonnet-4-6',max_tokens:1500,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:mime,data:b64}},{type:'text',text:SCAN_PROMPT_CLIENT}]}]})});
+    const j=await r.json();if(!r.ok)throw new Error((j.error&&j.error.message)||('HTTP '+r.status));return parseScan((j.content||[]).map(c=>c.text||'').join('\n'));
+  }
+  if(provider==='openai'){
+    const r=await fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Authorization':'Bearer '+key,'content-type':'application/json'},body:JSON.stringify({model:model||'gpt-4o',max_tokens:1500,response_format:{type:'json_object'},messages:[{role:'user',content:[{type:'text',text:SCAN_PROMPT_CLIENT},{type:'image_url',image_url:{url:'data:'+mime+';base64,'+b64}}]}]})});
+    const j=await r.json();if(!r.ok)throw new Error((j.error&&j.error.message)||('HTTP '+r.status));return parseScan(j.choices&&j.choices[0]&&j.choices[0].message&&j.choices[0].message.content);
+  }
+  const gm=model||'gemini-flash-latest';
+  const r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/'+gm+':generateContent?key='+encodeURIComponent(key),{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:SCAN_PROMPT_CLIENT},{inline_data:{mime_type:mime,data:b64}}]}],generationConfig:{responseMimeType:'application/json'}})});
+  const j=await r.json();if(!r.ok)throw new Error((j.error&&j.error.message)||('HTTP '+r.status));const c=j.candidates&&j.candidates[0];return parseScan(((c&&c.content&&c.content.parts)||[]).map(p=>p.text||'').join('\n'));
+}
+function runScan(){
+  const root=mgRoot();if(!root)return;const st=root.querySelector('[data-scanstatus]'),out=root.querySelector('[data-scanout]');
+  if(!SCAN_IMG){if(st)st.textContent='Choose a garden photo first.';return;}
+  if(AICFG.provider!=='hosted'&&!AICFG.key){if(st)st.textContent='Set an AI key in the Diagnose tab first, or switch that tab to “Hosted”.';return;}
+  if(st)st.textContent='Scanning your garden photo…';if(out)out.innerHTML='';
+  aiScan(AICFG.provider,AICFG.model||MODEL_DEFAULTS[AICFG.provider],AICFG.key,SCAN_IMG.mime,SCAN_IMG.b64).then(function(res){
+    SCAN_RESULT=res;if(st)st.textContent='';
+    const beds=(res.beds||[]);
+    if(!beds.length){if(out)out.innerHTML='<p class="mut">No beds or plants detected — try a clearer, wider photo of the whole bed.</p>';return;}
+    const np=beds.reduce(function(s,b){return s+((b.plants||[]).length);},0);
+    const list=beds.map(function(b){var pl=(b.plants||[]).map(function(p){return esc(p.name||'?')+((+p.qty>1)?' ×'+(+p.qty):'');}).join(', ')||'no plants detected';return '<div class="scanbed"><b>'+esc(b.name||'Bed')+'</b><div class="mut">'+pl+'</div></div>';}).join('');
+    if(out)out.innerHTML=list+'<div style="margin-top:11px"><button class="btn" data-act="applyscan">Add '+beds.length+' bed'+(beds.length>1?'s':'')+' &amp; '+np+' plant'+(np!==1?'s':'')+' to my garden</button> <span class="mut" style="font-size:12px">Rename or adjust anything after.</span></div>';
+  }).catch(function(err){if(st)st.textContent='Error: '+(err.message||err);});
+}
+function applyScan(){
+  const beds=(SCAN_RESULT&&SCAN_RESULT.beds)||[];if(!beds.length)return;
+  beds.forEach(function(b){USERCFG.beds.push({id:uid(),name:b.name||'New bed',length_m:2,width_m:1,plants:(b.plants||[]).map(function(p){return {type:plantCategoryFromName(p.name)||'leafy',name:p.name||'',qty:Math.max(1,parseInt(p.qty)||1)};})});});
+  SCAN_RESULT=null;SCAN_IMG=null;saveCfg();rerenderCurrent();
+}
+
 function paneMyGarden(){
   const el=document.createElement('div');el.className='mg pane-pad';
   const L=USERCFG.location;
@@ -930,6 +980,15 @@ function paneMyGarden(){
       '<div class="status" data-status></div></div></section>'+
 
     '<section>'+climateProfileCardHtml(regOpts)+'</section>'+
+    '<section><div class="card" style="padding:16px 18px">'+
+      '<p class="mini-h">📷 Build from a photo</p>'+
+      '<p class="mut">Upload a photo of your garden — AI detects the beds and plants, then adds them with the right care profiles. Uses the AI provider from the Diagnose tab (Hosted needs no key).</p>'+
+      '<div class="drop" data-scandrop>Click to choose a garden photo, or drag &amp; drop it here<input type="file" accept="image/*" data-scanfile style="display:none"></div>'+
+      '<div data-scanprev></div>'+
+      '<div style="margin-top:11px"><button class="btn" data-act="scan">Scan photo</button></div>'+
+      '<div class="status" data-scanstatus></div>'+
+      '<div data-scanout style="margin-top:8px"></div>'+
+    '</div></section>'+
 
     '<section><h2 class="sec">'+I.beds+' Beds &amp; plantings</h2>'+
       '<p class="lead">Add a bed, then add plants by name — just type “Tomato” or tap a quick-add chip, and the right care profile (watering, feeding, pest plan) is applied automatically.</p>'+
@@ -940,6 +999,12 @@ function paneMyGarden(){
 
   el.addEventListener('click',onMgClick);
   el.addEventListener('change',onMgChange);
+  (function(){var sd=el.querySelector('[data-scandrop]'),sf=el.querySelector('[data-scanfile]'),spw=el.querySelector('[data-scanprev]');
+    if(sd&&sf){sd.addEventListener('click',function(){sf.click();});
+      sd.addEventListener('dragover',function(e){e.preventDefault();sd.classList.add('over');});
+      sd.addEventListener('dragleave',function(){sd.classList.remove('over');});
+      sd.addEventListener('drop',function(e){e.preventDefault();sd.classList.remove('over');if(e.dataTransfer.files[0])loadScanImg(e.dataTransfer.files[0],spw);});
+      sf.addEventListener('change',function(){if(sf.files[0])loadScanImg(sf.files[0],spw);});}})();
   return el;
 }
 function mgRoot(){return document.querySelector('#app .mg');}
@@ -957,6 +1022,8 @@ function onMgClick(e){
   else if(act==='delbed'){USERCFG.beds=USERCFG.beds.filter(b=>b.id!==id);saveCfg();rerenderCurrent();}
   else if(act==='addplant'){const b=USERCFG.beds.find(b=>b.id===id);if(b){b.plants.push({type:Object.keys(PLANTS)[0],name:'',qty:1});saveCfg();rerenderCurrent();}}
   else if(act==='quickadd'){const b=USERCFG.beds.find(b=>b.id===id);if(b){addNamedPlant(b,t.dataset.plant);}}
+  else if(act==='scan'){runScan();}
+  else if(act==='applyscan'){applyScan();}
   else if(act==='delplant'){const[bid,idx]=id.split(':');const b=USERCFG.beds.find(b=>b.id===bid);if(b){b.plants.splice(+idx,1);saveCfg();rerenderCurrent();}}
 }
 function onMgChange(e){
