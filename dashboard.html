@@ -815,6 +815,10 @@ html[data-theme="night"] .wxa.warn b{color:var(--amber-bri)}
 .wxa.severe b{color:var(--clay)}
 .wxa-enable{align-self:flex-start;font-family:var(--font-ui);font-weight:600;font-size:12.5px;cursor:pointer;border-radius:10px;padding:7px 12px;border:1px solid var(--forest2);background:transparent;color:var(--forest2)}
 .wxa-enable:hover{background:color-mix(in srgb,var(--forest2) 10%,transparent)}
+.quickadd{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:10px}
+.qchip{font-family:var(--font-ui);font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--line2);background:var(--inset);color:var(--ink-soft);border-radius:999px;padding:4px 11px}
+.qchip:hover{border-color:var(--forest2);color:var(--forest2)}
+.savednote{font-size:12px;color:var(--ink-dim);margin-top:12px}
 .aiout b{color:var(--forest2)}
 .warnote{font-size:12px;color:var(--ink-dim);margin-top:8px}
 /* fertilizer/pest guide (scoped) */
@@ -863,6 +867,32 @@ html[data-theme="night"] .wxa.warn b{color:var(--amber-bri)}
 `;const s=document.createElement('style');s.textContent=css;document.head.appendChild(s);})();
 
 /* ========== PANE: My Garden ========== */
+/* common plant names → care category, so users can type "Tomato" not "Fruiting vegetables" */
+const COMMON_PLANTS={
+  'Tomato':'fruitveg','Pepper':'fruitveg','Cucumber':'fruitveg','Zucchini':'fruitveg','Squash':'fruitveg','Pumpkin':'fruitveg','Bean':'fruitveg','Pea':'fruitveg','Eggplant':'fruitveg','Melon':'fruitveg','Corn':'fruitveg',
+  'Kale':'leafy','Lettuce':'leafy','Spinach':'leafy','Cabbage':'leafy','Swiss chard':'leafy','Chard':'leafy','Arugula':'leafy','Broccoli':'leafy','Cauliflower':'leafy','Bok choy':'leafy','Collards':'leafy','Brussels sprouts':'leafy',
+  'Potato':'root','Carrot':'root','Beet':'root','Onion':'root','Garlic':'root','Radish':'root','Turnip':'root','Parsnip':'root','Leek':'root',
+  'Basil':'herbs','Parsley':'herbs','Cilantro':'herbs','Chives':'herbs','Mint':'herbs','Dill':'herbs','Thyme':'herbs','Oregano':'herbs','Rosemary':'herbs','Sage':'herbs',
+  'Strawberry':'strawberry',
+  'Raspberry':'brambles','Blackberry':'brambles','Boysenberry':'brambles','Gooseberry':'brambles','Currant':'brambles',
+  'Blueberry':'blueberry','Cranberry':'blueberry',
+  'Apple':'treefruit','Pear':'treefruit','Cherry':'treefruit','Plum':'treefruit','Apricot':'treefruit','Peach':'treefruit',
+  'Grape':'grape',
+  'Fig':'potted','Lemon':'potted','Lime':'potted','Orange':'potted','Citrus':'potted',
+  'Marigold':'annuals','Petunia':'annuals','Sunflower':'annuals','Zinnia':'annuals','Nasturtium':'annuals','Pansy':'annuals','Geranium':'annuals','Cosmos':'annuals',
+  'Rose':'perennials','Lavender':'perennials','Hosta':'perennials','Peony':'perennials','Daylily':'perennials','Tulip':'perennials','Iris':'perennials','Coneflower':'perennials'
+};
+const COMMON_PLANTS_LC={};Object.keys(COMMON_PLANTS).forEach(function(k){COMMON_PLANTS_LC[k.toLowerCase()]=COMMON_PLANTS[k];});
+const QUICK_PLANTS=['Tomato','Kale','Basil','Potato','Strawberry','Pepper','Carrot','Lettuce','Rose'];
+function plantCategoryFromName(name){
+  if(!name)return null;const n=String(name).toLowerCase().trim();
+  if(COMMON_PLANTS_LC[n])return COMMON_PLANTS_LC[n];
+  const words=n.split(/[^a-z]+/).filter(Boolean).reverse();
+  for(var i=0;i<words.length;i++){if(COMMON_PLANTS_LC[words[i]])return COMMON_PLANTS_LC[words[i]];}
+  return null;
+}
+function addNamedPlant(b,name){b.plants.push({type:plantCategoryFromName(name)||'leafy',name:name,qty:1});saveCfg();rerenderCurrent();}
+
 function paneMyGarden(){
   const el=document.createElement('div');el.className='mg pane-pad';
   const L=USERCFG.location;
@@ -871,9 +901,9 @@ function paneMyGarden(){
     const area=((b.length_m||0)*(b.width_m||0)).toFixed(1);
     const plants=b.plants.map((p,i)=>{
       const opts=Object.entries(PLANTS).map(([id,pl])=>'<option value="'+id+'"'+(p.type===id?' selected':'')+'>'+esc(pl.label)+'</option>').join('');
-      return '<div class="plantrow"><select class="in" data-field="ptype" data-id="'+b.id+':'+i+'">'+opts+'</select>'+
-        '<input class="in" style="min-width:150px" placeholder="variety / name (optional)" value="'+esc(p.name||'')+'" data-field="pname" data-id="'+b.id+':'+i+'">'+
-        '<input class="in" style="width:74px" type="number" min="1" value="'+(p.qty||1)+'" data-field="pqty" data-id="'+b.id+':'+i+'">'+
+      return '<div class="plantrow"><input class="in" style="min-width:165px" list="plantnames" placeholder="type a plant, e.g. Tomato" value="'+esc(p.name||'')+'" data-field="pname" data-id="'+b.id+':'+i+'">'+
+        '<select class="in" data-field="ptype" data-id="'+b.id+':'+i+'" title="care category — auto-set from the name; change if needed">'+opts+'</select>'+
+        '<input class="in" style="width:70px" type="number" min="1" value="'+(p.qty||1)+'" data-field="pqty" data-id="'+b.id+':'+i+'" title="how many">'+
         '<button class="btn sm danger" data-act="delplant" data-id="'+b.id+':'+i+'">remove</button></div>';
     }).join('');
     return '<div class="bedrow">'+
@@ -883,7 +913,8 @@ function paneMyGarden(){
       '<div class="fld"><label>Area</label><div style="padding:9px 0"><b>'+area+' m²</b></div></div>'+
       '<button class="btn sm danger" data-act="delbed" data-id="'+b.id+'">delete bed</button></div>'+
       '<div style="margin-top:6px"><span class="tag2">Plants in this bed</span></div>'+plants+
-      '<div style="margin-top:8px"><button class="btn sm ghost" data-act="addplant" data-id="'+b.id+'">+ add plant</button></div></div>';
+      '<div class="quickadd"><span class="tag2">Quick add:</span>'+QUICK_PLANTS.map(function(n){return '<button class="qchip" data-act="quickadd" data-id="'+b.id+'" data-plant="'+n+'">'+n+'</button>';}).join('')+'</div>'+
+      '<div style="margin-top:8px"><button class="btn sm ghost" data-act="addplant" data-id="'+b.id+'">+ add a blank row</button></div></div>';
   }).join(''):'<p class="mut">No beds yet — add your first bed below.</p>';
 
   el.innerHTML=
@@ -901,9 +932,11 @@ function paneMyGarden(){
     '<section>'+climateProfileCardHtml(regOpts)+'</section>'+
 
     '<section><h2 class="sec">'+I.beds+' Beds &amp; plantings</h2>'+
-      '<p class="lead">Add beds with their size, then list the plants in each. Plant types link to the Fert &amp; Pest Guide.</p>'+
+      '<p class="lead">Add a bed, then add plants by name — just type “Tomato” or tap a quick-add chip, and the right care profile (watering, feeding, pest plan) is applied automatically.</p>'+
       bedsHtml+
-      '<div style="margin-top:12px"><button class="btn" data-act="addbed">+ Add a bed</button></div></section>';
+      '<div style="margin-top:12px"><button class="btn" data-act="addbed">+ Add a bed</button></div>'+
+      '<div class="savednote">✓ Everything here saves automatically to this browser — it’s here when you come back.</div>'+
+      '<datalist id="plantnames">'+Object.keys(COMMON_PLANTS).map(function(n){return '<option value="'+n+'">';}).join('')+'</datalist></section>';
 
   el.addEventListener('click',onMgClick);
   el.addEventListener('change',onMgChange);
@@ -923,6 +956,7 @@ function onMgClick(e){
   else if(act==='addbed'){USERCFG.beds.push({id:uid(),name:'New bed',length_m:2,width_m:1,plants:[]});saveCfg();rerenderCurrent();}
   else if(act==='delbed'){USERCFG.beds=USERCFG.beds.filter(b=>b.id!==id);saveCfg();rerenderCurrent();}
   else if(act==='addplant'){const b=USERCFG.beds.find(b=>b.id===id);if(b){b.plants.push({type:Object.keys(PLANTS)[0],name:'',qty:1});saveCfg();rerenderCurrent();}}
+  else if(act==='quickadd'){const b=USERCFG.beds.find(b=>b.id===id);if(b){addNamedPlant(b,t.dataset.plant);}}
   else if(act==='delplant'){const[bid,idx]=id.split(':');const b=USERCFG.beds.find(b=>b.id===bid);if(b){b.plants.splice(+idx,1);saveCfg();rerenderCurrent();}}
 }
 function onMgChange(e){
@@ -932,7 +966,11 @@ function onMgChange(e){
   if(f==='cityinput')return;
   const m=(id||'').split(':');const b=USERCFG.beds.find(b=>b.id===m[0]);if(!b)return;
   if(m.length===1){if(f==='name')b.name=val;if(f==='len'){b.length_m=parseFloat(val)||0;}if(f==='wid'){b.width_m=parseFloat(val)||0;}saveCfg();if(f==='len'||f==='wid')rerenderCurrent();}
-  else{const p=b.plants[+m[1]];if(!p)return;if(f==='ptype')p.type=val;if(f==='pname')p.name=val;if(f==='pqty')p.qty=parseInt(val)||1;saveCfg();}
+  else{const p=b.plants[+m[1]];if(!p)return;
+    if(f==='ptype'){p.type=val;saveCfg();}
+    else if(f==='pname'){p.name=val;const cat=plantCategoryFromName(val);if(cat&&cat!==p.type){p.type=cat;saveCfg();rerenderCurrent();return;}saveCfg();}
+    else if(f==='pqty'){p.qty=parseInt(val)||1;saveCfg();}
+  }
 }
 
 /* ========== PANE: Diagnose (AI photo) ========== */
