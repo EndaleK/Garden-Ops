@@ -262,13 +262,13 @@
     <path d="M0 104 Q200 72 430 96 T860 92 T1200 96 V120 H0 Z" fill="var(--forest)" opacity=".30"/>
   </svg>
   <div class="wrap mast-inner">
-    <div class="brand">
+    <a class="brand" href="index.html" title="Back to Garden Ops home">
       <span class="mark" id="mark"></span>
       <div class="brand-txt">
         <h1>Garden <span class="amp">&amp;</span> Ops</h1>
         <p><span class="chip" id="gchip">Zone 4a</span> &nbsp;<span id="gsub">Edmonton, AB</span></p>
       </div>
-    </div>
+    </a>
     <div class="mast-right">
       <div class="today-read skel" id="mastToday">
         <div class="lab">Today</div><div class="big">—</div><div class="sub">fetching forecast…</div>
@@ -798,6 +798,12 @@ async function geocodeCity(q){
 .drop:hover,.drop.over{border-color:var(--forest2);color:var(--forest2)}
 .prev{max-width:100%;max-height:280px;border-radius:10px;display:block;margin:10px auto 0;box-shadow:var(--shadow)}
 .aiout{white-space:normal;font-size:14px;line-height:1.6;background:var(--inset);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-top:12px}
+.aiout .mh{font-family:var(--font-display);font-weight:600;font-size:14.5px;color:var(--ink);margin:13px 0 4px}
+.aiout .mh:first-child{margin-top:0}
+.aiout .mli{position:relative;padding-left:16px;margin:3px 0}
+.aiout .mli::before{content:"•";position:absolute;left:3px;color:var(--forest2)}
+.aiout .msp{height:7px}
+a.brand,a.brand:hover{text-decoration:none}
 .aiout b{color:var(--forest2)}
 .warnote{font-size:12px;color:var(--ink-dim);margin-top:8px}
 /* fertilizer/pest guide (scoped) */
@@ -931,7 +937,16 @@ function diagPrompt(){
   return "You are an expert horticulturist and IPM (integrated pest management) advisor helping a gardener in "+where+clim+". Examine the plant photo and reply in plain language, brief and specific:\n1. PLANT ID — best guess; if unsure list the top 2-3 candidates and the feature to check.\n2. DIAGNOSIS — what's wrong: pest, disease, nutrient deficiency, water stress, or environmental. Name the pest/disease if you can; say if you can't tell.\n3. TREATMENT — an IPM-first ladder: start with identification and the least-toxic control (hand-pick, water blast, row cover, insecticidal soap, BTK, iron phosphate) and escalate to spinosad or pyrethrin only as a last resort. Note pollinator safety and any pre-harvest interval for edibles.\n4. PREVENTION — one or two practical tips.\nFactor in the local climate and season. If the image is not a plant, say so.";
 }
 
-function mdLite(s){return esc(s).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/^\s*([1-4])\.\s/gm,'<br><b>$1.</b> ').replace(/\n/g,'<br>');}
+function mdLite(s){
+  return String(s).split('\n').map(function(raw){
+    var line=esc(raw).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/\*(?!\s)([^*]+?)\*/g,'<i>$1</i>');
+    var t=line.trim();
+    if(/^#{1,6}\s+/.test(t)) return '<div class="mh">'+t.replace(/^#{1,6}\s+/,'')+'</div>';
+    if(/^[*\-]\s+/.test(t)) return '<div class="mli">'+t.replace(/^[*\-]\s+/,'')+'</div>';
+    if(t==='') return '<div class="msp"></div>';
+    return '<div>'+line+'</div>';
+  }).join('');
+}
 
 function paneDiagnose(){
   const el=document.createElement('div');el.className='dx pane-pad';
