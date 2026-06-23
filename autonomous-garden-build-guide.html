@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#1f4d33">
-<title>Autonomous Garden — Build &amp; Sourcing Guide</title>
+<title>Autonomous Garden, Build &amp; Sourcing Guide</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="alternate icon" href="favicon.ico" sizes="any">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -66,33 +66,33 @@
 <body>
 <header class="masthead"><div class="wrap mast-inner">
   <span class="mark"><svg viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#1f4d33"/><circle cx="22.5" cy="9.5" r="3.1" fill="#e7b84f"/><path d="M16 27 C16 19 16 16 16 13" stroke="#a7e2b3" stroke-width="2.1" stroke-linecap="round" fill="none"/><path d="M16 18 C11.5 18 8.5 14.8 8.5 10.2 C13.4 10.2 16 13 16 18 Z" fill="#5fbf72"/><path d="M16 21 C20.5 21 23.5 18 23.5 14 C18.6 14 16 16.6 16 21 Z" fill="#3f8f55"/></svg></span>
-  <div><h1>Autonomous Garden — Build &amp; Sourcing Guide</h1>
+  <div><h1>Autonomous Garden, Build &amp; Sourcing Guide</h1>
   <p class="sub"><span class="chip">Phase 2 → 3</span> &nbsp;Self-watering, self-feeding, permission-based · target <b>under $250</b> · Edmonton, layman-friendly</p></div>
   <button class="theme-btn" id="themeBtn" aria-label="Toggle theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>
 </div></header>
 
 <main class="wrap">
-  <p class="lede">This turns your garden into a closed loop: it <b>measures</b> soil moisture and local weather, <b>decides</b> what each bed needs, <b>asks your permission</b> by phone, and on a tap <b>waters or doses liquid fertilizer</b> by itself. It bolts onto the system you already have — the watering engine, the Open-Meteo weather feed, and the Phase-2 sensor contract in <code>hardware/SENSOR-SPEC.md</code>. No prior electronics experience needed; everything below is solder-free.</p>
+  <p class="lede">This turns your garden into a closed loop. It <b>measures</b> soil moisture and the local weather, <b>works out</b> what each bed needs, <b>asks your permission</b> by phone, and then <b>waters or doses liquid fertilizer</b> on its own once you tap yes. It bolts onto what you already have (the watering engine, the Open-Meteo feed, and the Phase-2 sensor contract in <code>hardware/SENSOR-SPEC.md</code>). No electronics background needed, and nothing here needs soldering.</p>
 
-  <div class="callout good"><b>The golden rule of budget:</b> start with <b>one ESP32 + two soil sensors + one valve + the fertilizer pump</b> on your two thirstiest beds. Prove it for two weeks, then add sensors/valves a bed at a time. The full starter kit below lands around <b>$154 CAD</b> from AliExpress — well under $250, with headroom for shipping and a spare part or two.</p></div>
+  <div class="callout good"><b>The golden rule of budget:</b> start with <b>one ESP32 + two soil sensors + one valve + the fertilizer pump</b> on your two thirstiest beds. Prove it for two weeks, then add sensors/valves a bed at a time. The full starter kit below lands around <b>$154 CAD</b> from AliExpress, well under $250, with headroom for shipping and a spare part or two.</p></div>
 
   <h2><span class="num">01</span>How the self-maintaining loop works</h2>
   <p>Five stages run on a timer (every 30 minutes) plus a daily “feeding check.” You stay in control because nothing actuates without your approval (you can later flip individual beds to fully automatic once you trust it).</p>
   <div class="flow">
     <div class="fstep"><div class="n">1 · Sense</div><b>Soil + air</b>Capacitive probes read each bed’s moisture; a BME280 reads air temp/humidity.</div>
-    <div class="fstep"><div class="n">2 · Decide</div><b>+ weather</b>Readings combine with Open-Meteo rain, ET₀ and frost — the same math as <code>scripts/watering.py</code>.</div>
-    <div class="fstep"><div class="n">3 · Notify</div><b>Ask you</b>Phone alert: “Bed B3 dry (18% VWC), no rain 48 h — water 6 min?” with <b>Approve / Skip</b>.</div>
+    <div class="fstep"><div class="n">2 · Decide</div><b>+ weather</b>Readings combine with Open-Meteo rain, ET₀ and frost, the same math as <code>scripts/watering.py</code>.</div>
+    <div class="fstep"><div class="n">3 · Notify</div><b>Ask you</b>Phone alert: “Bed B3 dry (18% VWC), no rain 48 h, water 6 min?” with <b>Approve / Skip</b>.</div>
     <div class="fstep"><div class="n">4 · Act</div><b>On approval</b>The ESP32 opens that bed’s valve, or runs the dosing pump from the fertilizer tank, for a computed time.</div>
     <div class="fstep"><div class="n">5 · Log</div><b>Record</b>The action is written back so the dashboard’s treatment log stays accurate.</div>
   </div>
   <p>It already knows your plants’ needs (the dashboard has per-bed <code>weekly_mm</code> targets and feeding intervals), so a dry reading on a drought-tolerant bed won’t trigger the same alert as a dry reading on the squash.</p>
 
-  <h2><span class="num">02</span>What it costs — the bill of materials</h2>
-  <p>Prices are approximate <b>CAD</b> for the <b>cheapest reliable</b> sourcing (AliExpress). Buying the same parts on Amazon.ca for next-day delivery typically adds 30–45%. This is a <b>2-bed</b> starter that waters two beds and doses fertilizer to the drip line.</p>
+  <h2><span class="num">02</span>What it costs, the bill of materials</h2>
+  <p>Prices are approximate <b>CAD</b> for the <b>cheapest reliable</b> sourcing (AliExpress). Buying the same parts on Amazon.ca for next-day delivery typically adds 30-45%. This is a <b>2-bed</b> starter that waters two beds and doses fertilizer to the drip line.</p>
   <table>
     <thead><tr><th>Part</th><th>What it does</th><th class="r">Qty</th><th class="r">~CAD</th></tr></thead>
     <tbody>
-      <tr><td><b>ESP32 dev board</b> (WROOM-32)</td><td>The brain — Wi-Fi built in, runs the whole thing</td><td class="r">1</td><td class="r">$10</td></tr>
+      <tr><td><b>ESP32 dev board</b> (WROOM-32)</td><td>The brain, Wi-Fi built in, runs the whole thing</td><td class="r">1</td><td class="r">$10</td></tr>
       <tr><td><b>Capacitive soil moisture sensor v2.0</b></td><td>One per bed. Capacitive, <i>not</i> resistive (resistive corrodes in a season)</td><td class="r">3</td><td class="r">$15</td></tr>
       <tr><td><b>BME280</b> temp/humidity/pressure</td><td>Local microclimate + a second frost signal</td><td class="r">1</td><td class="r">$6</td></tr>
       <tr><td><b>4-channel relay module</b> (5V, opto-isolated)</td><td>Switches the valves &amp; pump. Inductive loads <i>never</i> touch the ESP32 directly</td><td class="r">1</td><td class="r">$8</td></tr>
@@ -103,7 +103,7 @@
       <tr><td><b>IP65 enclosure + cable glands</b></td><td>Keeps the electronics dry outdoors</td><td class="r">1</td><td class="r">$14</td></tr>
       <tr><td><b>Drip tubing, emitters, fittings</b></td><td>½″ mainline + ¼″ to each plant</td><td class="r">1 kit</td><td class="r">$30</td></tr>
       <tr><td><b>Flyback diodes, terminal blocks, wire</b></td><td>Protect relays from coil kickback; tidy connections</td><td class="r">1</td><td class="r">$8</td></tr>
-      <tr><td><b>Fertilizer tank</b> (reuse a 10–20 L jug/pail)</td><td>Holds the diluted liquid feed (e.g. your Miracle-Gro at ¼–½ strength)</td><td class="r">1</td><td class="r">$0</td></tr>
+      <tr><td><b>Fertilizer tank</b> (reuse a 10-20 L jug/pail)</td><td>Holds the diluted liquid feed (e.g. your Miracle-Gro at ¼-½ strength)</td><td class="r">1</td><td class="r">$0</td></tr>
       <tr class="tot"><td colspan="3">Estimated total (AliExpress)</td><td class="r">$154</td></tr>
     </tbody>
   </table>
@@ -113,8 +113,8 @@
   <table>
     <thead><tr><th>Channel</th><th>Best for</th><th>Trade-off</th></tr></thead>
     <tbody>
-      <tr><td><b>AliExpress</b></td><td>ESP32, sensors, relay, valves, dosing pump — cheapest by far</td><td>2–4 week shipping</td></tr>
-      <tr><td><b>Amazon.ca</b></td><td>Same parts, fast; “capacitive soil moisture 5-pack”, “12V solenoid valve ½ inch”, “12V peristaltic pump”</td><td>~30–45% more</td></tr>
+      <tr><td><b>AliExpress</b></td><td>ESP32, sensors, relay, valves, dosing pump, cheapest by far</td><td>2-4 week shipping</td></tr>
+      <tr><td><b>Amazon.ca</b></td><td>Same parts, fast; “capacitive soil moisture 5-pack”, “12V solenoid valve ½ inch”, “12V peristaltic pump”</td><td>~30-45% more</td></tr>
       <tr><td><b>RobotShop.ca / ABRA Electronics / DigiKey.ca</b></td><td>Canadian-stocked ESP32, BME280, quality connectors</td><td>Mid-price, reliable</td></tr>
       <tr><td><b>Lee Valley (Edmonton) / Canadian Tire / Home Depot</b></td><td>Drip tubing, emitters, 12V supply, hose fittings, the tank/pail</td><td>In-person today</td></tr>
     </tbody>
@@ -123,18 +123,18 @@
   <h2><span class="num">03</span>The two control options (software is free)</h2>
   <div class="two">
     <div class="card">
-      <h3 style="margin-top:0">Path A — Home Assistant + ESPHome <span class="pill">recommended</span></h3>
+      <h3 style="margin-top:0">Path A, Home Assistant + ESPHome <span class="pill">recommended</span></h3>
       <p>Best fit because your spec already assumes an always-on machine running an MQTT broker. Home Assistant (HA) is free and runs on a spare PC, a Raspberry Pi, or that always-on Mac.</p>
       <ul>
-        <li><b>Flashing is codeless:</b> ESPHome has a browser “web installer” — plug the ESP32 in by USB, click install.</li>
-        <li><b>Approval notifications:</b> the HA Companion app (iOS/Android, free) sends <b>actionable notifications</b> with real buttons — <i>Water now</i> / <i>Skip</i>. Tapping a button runs the automation.</li>
+        <li><b>Flashing is codeless:</b> ESPHome has a browser “web installer”, plug the ESP32 in by USB, click install.</li>
+        <li><b>Approval notifications:</b> the HA Companion app (iOS/Android, free) sends <b>actionable notifications</b> with real buttons, <i>Water now</i> / <i>Skip</i>. Tapping a button runs the automation.</li>
         <li><b>Weather built in:</b> HA’s Open-Meteo/Met.no integration gives rain &amp; frost; you gate watering on it exactly like the dashboard.</li>
         <li><b>Local &amp; private:</b> no cloud account required.</li>
       </ul>
-      <p class="srcs">Cost if you already have an always-on computer: <b>$0</b>. A dedicated Raspberry Pi adds ~$60–110 (keeps you near budget only if you skip it / reuse hardware).</p>
+      <p class="srcs">Cost if you already have an always-on computer: <b>$0</b>. A dedicated Raspberry Pi adds ~$60-110 (keeps you near budget only if you skip it / reuse hardware).</p>
     </div>
     <div class="card">
-      <h3 style="margin-top:0">Path B — Blynk (no extra computer) <span class="pill">cheapest</span></h3>
+      <h3 style="margin-top:0">Path B, Blynk (no extra computer) <span class="pill">cheapest</span></h3>
       <p>If you have no always-on machine, run the ESP32 with a small Arduino sketch and the free Blynk app.</p>
       <ul>
         <li><b>No host:</b> the ESP32 talks to Blynk’s free cloud directly.</li>
@@ -146,7 +146,7 @@
     </div>
   </div>
 
-  <h2><span class="num">04</span>Build it — step by step</h2>
+  <h2><span class="num">04</span>Build it, step by step</h2>
   <div class="card step">
     <h3 style="margin-top:0">A · Bench-test indoors first (30 min)</h3>
     <ol>
@@ -161,19 +161,19 @@
     <ol>
       <li>Hold the probe <b>in air</b>, record the raw reading = <b>0% VWC</b>.</li>
       <li>Stand it in a glass of <b>water</b> to the line, record the raw reading = <b>100% VWC</b>.</li>
-      <li>Enter both numbers so the firmware maps linearly. The watering engine’s thresholds are <b>&lt;20% = water now</b>, <b>20–30% = water soon</b>, <b>&gt;30% = skip</b> (loam; recalibrate against a finger-test on clay beds).</li>
+      <li>Enter both numbers so the firmware maps linearly. The watering engine’s thresholds are <b>&lt;20% = water now</b>, <b>20-30% = water soon</b>, <b>&gt;30% = skip</b> (loam; recalibrate against a finger-test on clay beds).</li>
     </ol>
   </div>
   <div class="card step">
     <h3 style="margin-top:0">C · Wire the valves &amp; pump through the relay</h3>
     <ol>
       <li>Mount the relay board in the enclosure. ESP32 control pins → relay <code>IN1..IN4</code>.</li>
-      <li>Run the 12V supply through each relay’s <b>COM→NO</b> to one valve or the pump. <b>Never</b> drive a valve or pump from an ESP32 pin — they pull amps and will fry it.</li>
+      <li>Run the 12V supply through each relay’s <b>COM→NO</b> to one valve or the pump. <b>Never</b> drive a valve or pump from an ESP32 pin, they pull amps and will fry it.</li>
       <li>Put a <b>flyback diode</b> across each valve/pump coil (stripe to +12V) to absorb the kickback when it switches off.</li>
       <li>Power the ESP32 from the 12V supply via the buck/USB converter, so it’s all one plug.</li>
       <li>Seal cable entries with the glands; keep the enclosure off the ground.</li>
     </ol>
-    <div class="callout warn"><b>Low-voltage only.</b> This whole system is 12V DC — safe and the right choice outdoors. Plug the 12V adapter into a <b>GFCI</b>-protected outdoor outlet. Do not switch mains-voltage pumps with this.</div>
+    <div class="callout warn"><b>Low-voltage only.</b> This whole system is 12V DC, safe and the right choice outdoors. Plug the 12V adapter into a <b>GFCI</b>-protected outdoor outlet. Do not switch mains-voltage pumps with this.</div>
   </div>
   <div class="card step">
     <h3 style="margin-top:0">D · Plumb the water</h3>
@@ -186,12 +186,12 @@
   <div class="card step">
     <h3 style="margin-top:0">E · Add the liquid-fertilizer tank</h3>
     <ol>
-      <li>Fill the tank with <b>pre-diluted</b> liquid feed — e.g. your Miracle-Gro 24-8-16 mixed to ¼–½ the normal strength so the pump can run it straight.</li>
+      <li>Fill the tank with <b>pre-diluted</b> liquid feed, e.g. your Miracle-Gro 24-8-16 mixed to ¼-½ the normal strength so the pump can run it straight.</li>
       <li>Peristaltic pump <b>inlet</b> hose → bottom of the tank; <b>outlet</b> → a tee into the drip mainline (after the valve).</li>
       <li>The pump is self-priming and only the silicone tube touches the fertilizer, so it tolerates the salts well.</li>
       <li>On a feeding day the loop opens a bed’s valve, runs the pump for N seconds (dose = your per-plant rate), then flushes with plain water.</li>
     </ol>
-    <p class="srcs"><b>Cheaper, non-electric alternative:</b> a <b>venturi injector</b> ($10–20) draws fertilizer by suction from the tank using water flow — no pump, no power — but it isn’t precisely dose-controlled and needs a pressure drop. The peristaltic pump is the right call for <i>software-controlled</i> dosing.</p>
+    <p class="srcs"><b>Cheaper, non-electric alternative:</b> a <b>venturi injector</b> ($10-20) draws fertilizer by suction from the tank using water flow, no pump, no power, but it isn’t precisely dose-controlled and needs a pressure drop. The peristaltic pump is the right call for <i>software-controlled</i> dosing.</p>
   </div>
   <div class="card step">
     <h3 style="margin-top:0">F · Turn on the brain</h3>
@@ -208,7 +208,7 @@
     <li><b>Rain skip:</b> if Open-Meteo shows meaningful rain in the next 48 h, it proposes <i>Skip</i>.</li>
     <li><b>Frost lockout:</b> if tonight’s low is near/under your frost threshold, no watering or feeding is proposed (wet soil + frost = damage).</li>
     <li><b>Per-plant smarts:</b> drought-tolerant beds use a lower trigger; heavy drinkers (squash) use a higher one.</li>
-    <li><b>Feeding stop dates:</b> it won’t propose nitrogen feeds for perennials/woody plants after ~Aug 1 (hardening for winter) — mirrors the dashboard rule.</li>
+    <li><b>Feeding stop dates:</b> it won’t propose nitrogen feeds for perennials/woody plants after ~Aug 1 (hardening for winter), mirrors the dashboard rule.</li>
     <li><b>Caps:</b> a max run-time per valve and a daily max so a stuck sensor can’t flood a bed.</li>
   </ul>
 
@@ -217,31 +217,31 @@
     <li><b>Blow out the lines before freeze-up</b> (late Oct): disconnect water, open valves, push the lines clear with low-pressure air. Frozen water splits valves and tubing.</li>
     <li><b>Bring the pump &amp; fertilizer tank indoors</b> for winter; empty and rinse the pump tube.</li>
     <li><b>GFCI outlet</b> for the 12V adapter; keep all connections in the IP65 box, off the ground.</li>
-    <li><b>Capacitive sensors</b> only — conformal-coat the electronics end and keep the marked line above soil.</li>
+    <li><b>Capacitive sensors</b> only, conformal-coat the electronics end and keep the marked line above soil.</li>
     <li><b>Fail-safe valves:</b> normally-closed means a power cut stops water rather than leaving it running.</li>
   </ul>
 
   <h2><span class="num">07</span>Scaling &amp; staying in budget</h2>
-  <p>The $154 starter covers 2 beds. Each additional bed is just <b>+1 sensor (~$4) and +1 valve (~$13)</b> on spare relay channels — roughly <b>$17/bed</b>. One ESP32 comfortably handles 3–4 sensors and a 4-channel relay; a second ESP32 (+$10) and an 8-channel relay (~$10) take you to a fully wired multi-bed garden still under $250.</p>
+  <p>The $154 starter covers 2 beds. Each additional bed is just <b>+1 sensor (~$4) and +1 valve (~$13)</b> on spare relay channels, roughly <b>$17/bed</b>. One ESP32 comfortably handles 3-4 sensors and a 4-channel relay; a second ESP32 (+$10) and an 8-channel relay (~$10) take you to a fully wired multi-bed garden still under $250.</p>
 
-  <div class="callout"><b>Reality check:</b> exact prices drift with the market and shipping. Treat the totals as a tight estimate, confirm current listings on AliExpress/Amazon.ca before ordering, and buy one spare sensor — they’re the part most likely to need replacing.</div>
+  <div class="callout"><b>Reality check:</b> exact prices drift with the market and shipping. Treat the totals as a tight estimate, confirm current listings on AliExpress/Amazon.ca before ordering, and buy one spare sensor, they’re the part most likely to need replacing.</div>
 
   <h2><span class="num">08</span>Sources</h2>
   <p class="srcs">Current pricing, wiring practice, and the control/notification approach were drawn from:</p>
   <ul class="srcs">
-    <li><a href="https://botmonster.com/posts/smart-garden-irrigation-home-assistant-rain-sensor/">Botmonster — Home Assistant smart irrigation, $25–89 hardware</a></li>
-    <li><a href="https://www.instructables.com/ESP32-Soil-Moisture-Sensors-DIY-Automatic-Watering/">Instructables — ESP32 soil-moisture DIY automatic watering</a></li>
-    <li><a href="https://smarthomescene.com/diy/diy-capacitive-soil-moisture-sensor-v1-2-with-esphome/">SmartHomeScene — capacitive soil sensor with ESPHome</a></li>
-    <li><a href="https://community.home-assistant.io/t/dosing-fertilizers-system-best-cheap-way-to-set-8-relay-connected-peristaltic-mini-pumps-step-motors/441345">Home Assistant Community — relay-connected peristaltic fertilizer dosing</a></li>
-    <li><a href="https://esp32io.com/tutorials/esp32-automatic-irrigation-system">esp32io — automatic irrigation, relay/MOSFET wiring safety</a></li>
-    <li><a href="https://www.instructables.com/Soil-Moisture-Feedback-Controlled-Internet-Connect/">Instructables — soil-feedback drip irrigation with ESP32 + Blynk</a></li>
-    <li><a href="https://help.dripdepot.com/support/solutions/articles/11000043775-fertilizer-injector-buying-guide">Drip Depot — fertilizer injector buying guide (peristaltic vs venturi)</a></li>
-    <li><a href="https://community.home-assistant.io/t/send-actionable-notification-when-plants-need-water-including-optional-image/366568">Home Assistant Community — actionable “plants need water” notification blueprint</a></li>
-    <li><a href="https://www.aliexpress.com/w/wholesale-esp32-8-channel-relay.html">AliExpress — ESP32 / 8-channel relay pricing</a></li>
+    <li><a href="https://botmonster.com/posts/smart-garden-irrigation-home-assistant-rain-sensor/">Botmonster, Home Assistant smart irrigation, $25-89 hardware</a></li>
+    <li><a href="https://www.instructables.com/ESP32-Soil-Moisture-Sensors-DIY-Automatic-Watering/">Instructables, ESP32 soil-moisture DIY automatic watering</a></li>
+    <li><a href="https://smarthomescene.com/diy/diy-capacitive-soil-moisture-sensor-v1-2-with-esphome/">SmartHomeScene, capacitive soil sensor with ESPHome</a></li>
+    <li><a href="https://community.home-assistant.io/t/dosing-fertilizers-system-best-cheap-way-to-set-8-relay-connected-peristaltic-mini-pumps-step-motors/441345">Home Assistant Community, relay-connected peristaltic fertilizer dosing</a></li>
+    <li><a href="https://esp32io.com/tutorials/esp32-automatic-irrigation-system">esp32io, automatic irrigation, relay/MOSFET wiring safety</a></li>
+    <li><a href="https://www.instructables.com/Soil-Moisture-Feedback-Controlled-Internet-Connect/">Instructables, soil-feedback drip irrigation with ESP32 + Blynk</a></li>
+    <li><a href="https://help.dripdepot.com/support/solutions/articles/11000043775-fertilizer-injector-buying-guide">Drip Depot, fertilizer injector buying guide (peristaltic vs venturi)</a></li>
+    <li><a href="https://community.home-assistant.io/t/send-actionable-notification-when-plants-need-water-including-optional-image/366568">Home Assistant Community, actionable “plants need water” notification blueprint</a></li>
+    <li><a href="https://www.aliexpress.com/w/wholesale-esp32-8-channel-relay.html">AliExpress, ESP32 / 8-channel relay pricing</a></li>
   </ul>
 
   <footer>
-    <b>Disclaimer:</b> low-voltage DIY guidance only. Prices are estimates in CAD and change frequently — verify current listings before buying. Use a GFCI outlet, keep mains voltage out of the garden, and winterize before freeze-up. Pesticide/fertilizer handling still follows the dashboard’s IPM-first and label rules. Built to extend <code>hardware/SENSOR-SPEC.md</code>.
+    <b>Disclaimer:</b> low-voltage DIY guidance only. Prices are estimates in CAD and change frequently, verify current listings before buying. Use a GFCI outlet, keep mains voltage out of the garden, and winterize before freeze-up. Pesticide/fertilizer handling still follows the dashboard’s IPM-first and label rules. Built to extend <code>hardware/SENSOR-SPEC.md</code>.
   </footer>
 </main>
 <script>

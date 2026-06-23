@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#1f4d33">
-<title>Garden Ops — Edmonton garden management</title>
+<title>Garden Ops, Edmonton garden management</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="alternate icon" href="favicon.ico" sizes="any">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -16,7 +16,7 @@
   *{box-sizing:border-box}html,body{margin:0}
   body{font-family:var(--font-ui);color:var(--ink);background:var(--paper);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden;padding-bottom:50px}
   body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:var(--noise);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
-  /* botanical garden watermark — fixed, theme-aware, sits behind all content */
+  /* botanical garden watermark, fixed, theme-aware, sits behind all content */
   body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;background-repeat:repeat;background-size:600px 600px}
   html[data-theme="day"] body::after{background-image:url("garden-bg-day.svg");opacity:.30}
   html[data-theme="night"] body::after{background-image:url("garden-bg-night.svg");opacity:.26}
@@ -122,7 +122,7 @@
     <div class="hero-main">
       <span class="eyebrow" id="eyebrow">🌱 Plan any backyard · Canada &amp; US hardiness zones</span>
       <h1>Your garden, <em>run like operations.</em></h1>
-      <p class="tagline">A weather-aware command center for your backyard garden — it tracks every plant, computes watering from live local weather, schedules feeding and IPM-first pest control, and is wired to grow into a self-maintaining, sensor-driven system.</p>
+      <p class="tagline">Think of it as a little command center for your backyard. It keeps track of every plant, works out the watering from your local weather, and stays on top of feeding and pest control (the gentle kind first). And it's built to grow into a setup that waters and feeds itself, once you're ready for that.</p>
       <div class="hero-cta">
         <a class="btn" href="dashboard.html">Open the dashboard
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
@@ -147,26 +147,26 @@
 
   <section>
     <h2 class="sec-h">Where to start</h2>
-    <p class="sec-sub">Three doors into the system.</p>
+    <p class="sec-sub">Three ways in. Pick whichever one fits where you're at.</p>
     <div class="cards">
       <a class="ecard" href="dashboard.html">
         <div class="ic f"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></div>
         <h3>Garden &amp; Ops Dashboard</h3>
-        <p>The daily driver: build your garden by name or from a photo, get live per-bed watering, feeding and harvest windows, AI photo diagnosis, and severe-weather alerts — all saved in your browser.</p>
+        <p>This is the one you'll live in. Build your garden by name or straight from a photo, then get watering, feeding and harvest timing for every bed, plus AI plant diagnosis and a heads-up before rough weather rolls in. It all saves right in your browser.</p>
         <div class="tags"><span class="pill">Build from a photo</span><span class="pill">Diagnose</span><span class="pill">Weather alerts</span><span class="pill">Watering</span></div>
         <span class="go">Open dashboard →</span>
       </a>
       <a class="ecard" href="fertilizer-pest-guide.html">
         <div class="ic a"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3h4M9 7h6l-1 3.5a5 5 0 0 1 2 4V18a3 3 0 0 1-3 3h-2a3 3 0 0 1-3-3v-3.5a5 5 0 0 1 2-4Z"/><path d="M8.5 14h7"/></svg></div>
         <h3>Fertilizer &amp; Pest Guide</h3>
-        <p>Pick a plant type and region for tailored, IPM-first feeding and pest control. 12 plant types × 7 Canada/US climate zones, with pollinator and pre-harvest safety built in.</p>
+        <p>Pick a plant type and your region, and get feeding and pest advice made for it. 12 plant types across 7 Canada/US zones. It always flags pollinator and pre-harvest safety too, so you don't have to keep it all in your head.</p>
         <div class="tags"><span class="pill">12 plant types</span><span class="pill">7 regions</span><span class="pill">IPM-first</span></div>
         <span class="go">Open guide →</span>
       </a>
       <a class="ecard" href="autonomous-garden-build-guide.html">
         <div class="ic s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="7" width="10" height="10" rx="2"/><path d="M9 3v2M15 3v2M9 19v2M15 19v2M3 9h2M3 15h2M19 9h2M19 15h2"/></svg></div>
         <h3>Autonomous Build Guide</h3>
-        <p>Make the garden self-maintaining: sensors + a liquid-fertilizer tank that water and feed on your approval. Full parts list, sourcing, and layman setup — under $250.</p>
+        <p>Want the garden to mostly run itself? Sensors and a liquid-feed tank that water and fertilize once you tap yes. Full parts list, where to buy each bit, and plain setup steps anyone can follow. All under $250.</p>
         <div class="tags"><span class="pill">ESP32 + sensors</span><span class="pill">&lt; $250</span><span class="pill">Solder-free</span></div>
         <span class="go">Open build guide →</span>
       </a>
@@ -175,20 +175,20 @@
 
   <section>
     <h2 class="sec-h">Point your camera. Skip the setup.</h2>
-    <p class="sec-sub">Two AI tools handle the tedious parts — building your garden, and figuring out what’s wrong with a plant.</p>
+    <p class="sec-sub">Two AI tools that do the boring parts for you. Setting up your beds, and working out what's actually wrong with a plant.</p>
     <div class="aicards">
       <a class="aicard build" href="dashboard.html#build">
         <div class="ic f"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L8 6H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1h-4Z"/><circle cx="12" cy="12.5" r="3.4"/></svg></div>
         <h3>Build your garden from a photo</h3>
-        <p>Snap one or more photos of your beds. AI detects every bed and plant, merges multiple angles, and adds them with the right watering, feeding, and pest profiles — no manual entry.</p>
+        <p>Take a photo or two of your beds (different angles help). The AI spots each bed and plant, stitches the shots together, and adds everything with the right care already attached. No typing.</p>
         <div class="tags"><span class="pill">Multi-photo</span><span class="pill">Auto care profiles</span><span class="pill">No key on the live site</span></div>
         <span class="go">Build from a photo →</span>
       </a>
       <a class="aicard diag" href="dashboard.html#diagnose">
         <div class="ic a"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4v5a5 5 0 0 0 10 0V4"/><path d="M9 18a4 4 0 0 0 8 0v-3"/><circle cx="18" cy="13" r="2.3"/></svg></div>
         <h3>Diagnose a sick plant</h3>
-        <p>Photograph a struggling plant, pest, or weed and get an instant ID plus an IPM-first treatment ladder — least-toxic first, with pollinator and pre-harvest safety noted.</p>
-        <div class="tags"><span class="pill">Instant ID</span><span class="pill">IPM-first plan</span><span class="pill">Hosted — no key</span></div>
+        <p>Snap a sad-looking plant, a bug, or a weed and get a quick ID plus a treatment plan that starts with the gentlest fix first. Pollinator and pre-harvest safety gets called out too.</p>
+        <div class="tags"><span class="pill">Instant ID</span><span class="pill">IPM-first plan</span><span class="pill">Hosted, no key</span></div>
         <span class="go">Diagnose a plant →</span>
       </a>
     </div>
@@ -196,16 +196,16 @@
 
   <section>
     <h2 class="sec-h">What it does</h2>
-    <p class="sec-sub">Deterministic where it can be, structured everywhere, built to scale beyond one backyard.</p>
+    <p class="sec-sub">Honestly, most of it just runs on its own. Here's the short version.</p>
     <div class="feat">
-      <div class="fc"><div class="fi">🪴</div><h4>Build from a photo</h4><p>Snap your garden and AI lays out the beds and plants for you — or just type a plant name and the right care profile is applied.</p></div>
-      <div class="fc"><div class="fi">💧</div><h4>Weather-aware watering</h4><p>A water-balance model per bed using live local rain, ET₀, and frost from Open-Meteo — no guesswork.</p></div>
-      <div class="fc"><div class="fi">📷</div><h4>AI photo diagnosis</h4><p>Photograph a struggling plant for an instant ID and IPM-first treatment plan — hosted, no key needed.</p></div>
-      <div class="fc"><div class="fi">🐛</div><h4>IPM-first pest control</h4><p>Always least-toxic first — identify, hand-pick, soap, BTK — with pollinator and harvest safety noted.</p></div>
-      <div class="fc"><div class="fi">🔔</div><h4>Severe-weather alerts</h4><p>Frost, heat spikes, damaging wind, hail and heavy rain flagged ahead of time, with the garden action to take.</p></div>
-      <div class="fc"><div class="fi">💾</div><h4>Remembers your garden</h4><p>Your beds, plants and settings save automatically and are here when you come back.</p></div>
-      <div class="fc"><div class="fi">🌎</div><h4>Anywhere, any climate</h4><p>Set your city for live weather and an automatic climate profile; works across Canada/US hardiness zones.</p></div>
-      <div class="fc"><div class="fi">🤖</div><h4>Sensor-ready automation</h4><p>Designed for soil sensors and approval-based watering &amp; feeding when you're ready to wire it up.</p></div>
+      <div class="fc"><div class="fi">🪴</div><h4>Build from a photo</h4><p>Snap your garden and the AI lays out the beds and plants for you. Or just type a name, the care profile sorts itself out.</p></div>
+      <div class="fc"><div class="fi">💧</div><h4>Weather-aware watering</h4><p>Every bed gets its own water-balance math from live rain, ET₀ and frost data. So, no more guessing.</p></div>
+      <div class="fc"><div class="fi">📷</div><h4>AI photo diagnosis</h4><p>Photograph a struggling plant and get a quick ID and a gentle-first treatment plan. Hosted, so no API key needed.</p></div>
+      <div class="fc"><div class="fi">🐛</div><h4>IPM-first pest control</h4><p>Least-toxic stuff first, always. Identify, hand-pick, soap, BTK, and only then anything stronger. Bees and harvest timing noted.</p></div>
+      <div class="fc"><div class="fi">🔔</div><h4>Severe-weather alerts</h4><p>Frost, heat spikes, mean wind, hail and heavy rain, flagged before they hit, with what to actually do about it.</p></div>
+      <div class="fc"><div class="fi">💾</div><h4>Remembers your garden</h4><p>Your beds, plants and settings just save on their own, and they're waiting for you when you come back.</p></div>
+      <div class="fc"><div class="fi">🌎</div><h4>Anywhere, any climate</h4><p>Set your city and you get live weather plus a climate profile, automatically. Works right across Canada and the US.</p></div>
+      <div class="fc"><div class="fi">🤖</div><h4>Sensor-ready automation</h4><p>Built to take soil sensors and approval-based watering &amp; feeding later on, whenever you feel like wiring it up.</p></div>
     </div>
   </section>
 
@@ -214,7 +214,7 @@
       <div><b>Garden Ops</b> · set your city &amp; beds in the dashboard · your garden saves in your browser</div>
       <div><a href="dashboard.html">Dashboard</a> · <a href="fertilizer-pest-guide.html">Guide</a> · <a href="autonomous-garden-build-guide.html">Build</a></div>
     </div>
-    <p style="margin:12px 0 0">A personal garden tool, structured to become a multi-garden product. Stats reflect the current registry snapshot.</p>
+    <p style="margin:12px 0 0">A personal garden tool that's quietly built to become something bigger. Everything you see saves to your browser, no account needed.</p>
   </footer>
 </main>
 
@@ -246,13 +246,13 @@
       var beds=cfg.beds.length;
       var plantings=cfg.beds.reduce(function(s,b){return s+((b.plants&&b.plants.length)||0);},0);
       var plants=cfg.beds.reduce(function(s,b){return s+((b.plants||[]).reduce(function(t,p){return t+Math.max(1,parseInt(p.qty)||1);},0));},0);
-      var zone=(cfg.climate&&cfg.climate.zone)||(cfg.location&&cfg.location.zone)||'—';
+      var zone=(cfg.climate&&cfg.climate.zone)||(cfg.location&&cfg.location.zone)||', ';
       var loc=cfg.location,hasLoc=loc&&loc.lat!=null&&loc.lon!=null;
-      var fifth=hasLoc?tile('<span id="liveTemp">—</span>',esc((loc.city||'Local'))+' now',true):tile('✓','Saved in your browser',true);
+      var fifth=hasLoc?tile('<span id="liveTemp">·</span>',esc((loc.city||'Local'))+' now',true):tile('✓','Saved in your browser',true);
       box.innerHTML=tile(esc(zone),'Your hardiness zone')+tile(beds,'Your bed'+(beds===1?'':'s'))+
         tile(plantings,'Planting'+(plantings===1?'':'s'))+tile(plants,'Plant'+(plants===1?'':'s'))+fifth;
       var eb=document.getElementById('eyebrow');
-      if(eb)eb.innerHTML='🌱 '+(loc&&loc.city?esc(loc.city)+(loc.province?', '+esc(loc.province):''):'Your garden')+(zone&&zone!=='—'?' · Hardiness Zone '+esc(zone):'');
+      if(eb)eb.innerHTML='🌱 '+(loc&&loc.city?esc(loc.city)+(loc.province?', '+esc(loc.province):''):'Your garden')+(zone&&zone!==', '?' · Hardiness Zone '+esc(zone):'');
       if(hasLoc)liveTemp(loc.lat,loc.lon,loc.timezone);
     })();
   })();
