@@ -68,10 +68,10 @@
   /* botanical garden watermark — fixed, theme-aware, behind all content */
   body::after{
     content:""; position:fixed; inset:0; pointer-events:none; z-index:-1;
-    background-repeat:repeat; background-size:300px 300px;
+    background-repeat:repeat; background-size:600px 600px;
   }
-  html[data-theme="day"] body::after{background-image:url("garden-wm-day.svg"); opacity:.10}
-  html[data-theme="night"] body::after{background-image:url("garden-wm-night.svg"); opacity:.10}
+  html[data-theme="day"] body::after{background-image:url("garden-bg-day.svg"); opacity:.16}
+  html[data-theme="night"] body::after{background-image:url("garden-bg-night.svg"); opacity:.17}
   .wrap{width:min(94%,1200px); margin-inline:auto}
   a{color:var(--forest2); text-decoration:none} a:hover{text-decoration:underline}
 
