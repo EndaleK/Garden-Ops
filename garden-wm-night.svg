@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300">
+<defs>
+<path id="lf" d="M0 0 C7 -8 19 -9 25 -2 C19 5 7 5 0 0 Z"/>
+<g id="sprig">
+<path d="M0 0 C3 18 3 36 0 54" fill="none" stroke="#6fce86" stroke-width="1.5" stroke-linecap="round"/>
+<use href="#lf" transform="translate(1,11) rotate(-30)"/>
+<use href="#lf" transform="translate(1,23) rotate(30) scale(-1,1)"/>
+<use href="#lf" transform="translate(2,34) rotate(-28)"/>
+<use href="#lf" transform="translate(2,46) rotate(28) scale(-1,1)"/>
+</g>
+</defs>
+<g fill="#6fce86" stroke="none">
+<use href="#sprig" transform="translate(40,30) rotate(-14)"/>
+<use href="#sprig" transform="translate(238,44) rotate(20) scale(.82)"/>
+<use href="#lf" transform="translate(138,70) rotate(40) scale(1.35)"/>
+<use href="#lf" transform="translate(196,150) rotate(-36) scale(1.5)"/>
+<use href="#sprig" transform="translate(250,228) rotate(-8) scale(.92)"/>
+<use href="#lf" transform="translate(150,238) rotate(152) scale(1.2)"/>
+<use href="#sprig" transform="translate(52,196) rotate(10) scale(.72)"/>
+<use href="#lf" transform="translate(96,150) rotate(8) scale(1.1)"/>
+<circle cx="110" cy="120" r="2.6"/><circle cx="118" cy="126" r="2.6"/><circle cx="104" cy="128" r="2.6"/>
+<circle cx="214" cy="112" r="2.4"/><circle cx="222" cy="118" r="2.4"/>
+</g>
+</svg>

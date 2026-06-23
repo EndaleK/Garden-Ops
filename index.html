@@ -16,6 +16,10 @@
   *{box-sizing:border-box}html,body{margin:0}
   body{font-family:var(--font-ui);color:var(--ink);background:var(--paper);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden;padding-bottom:50px}
   body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:var(--noise);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+  /* botanical garden watermark — fixed, theme-aware, sits behind all content */
+  body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;background-repeat:repeat;background-size:300px 300px}
+  html[data-theme="day"] body::after{background-image:url("garden-wm-day.svg");opacity:.11}
+  html[data-theme="night"] body::after{background-image:url("garden-wm-night.svg");opacity:.10}
   .wrap{width:min(94%,1080px);margin-inline:auto;position:relative;z-index:1}
   a{text-decoration:none;color:inherit}
 
@@ -141,27 +145,6 @@
   </div>
 
   <section>
-    <h2 class="sec-h">Point your camera. Skip the setup.</h2>
-    <p class="sec-sub">Two AI tools handle the tedious parts — building your garden, and figuring out what’s wrong with a plant.</p>
-    <div class="aicards">
-      <a class="aicard build" href="dashboard.html#build">
-        <div class="ic f"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L8 6H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1h-4Z"/><circle cx="12" cy="12.5" r="3.4"/></svg></div>
-        <h3>Build your garden from a photo</h3>
-        <p>Snap one or more photos of your beds. AI detects every bed and plant, merges multiple angles, and adds them with the right watering, feeding, and pest profiles — no manual entry.</p>
-        <div class="tags"><span class="pill">Multi-photo</span><span class="pill">Auto care profiles</span><span class="pill">No key on the live site</span></div>
-        <span class="go">Build from a photo →</span>
-      </a>
-      <a class="aicard diag" href="dashboard.html#diagnose">
-        <div class="ic a"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4v5a5 5 0 0 0 10 0V4"/><path d="M9 18a4 4 0 0 0 8 0v-3"/><circle cx="18" cy="13" r="2.3"/></svg></div>
-        <h3>Diagnose a sick plant</h3>
-        <p>Photograph a struggling plant, pest, or weed and get an instant ID plus an IPM-first treatment ladder — least-toxic first, with pollinator and pre-harvest safety noted.</p>
-        <div class="tags"><span class="pill">Instant ID</span><span class="pill">IPM-first plan</span><span class="pill">Hosted — no key</span></div>
-        <span class="go">Diagnose a plant →</span>
-      </a>
-    </div>
-  </section>
-
-  <section>
     <h2 class="sec-h">Where to start</h2>
     <p class="sec-sub">Three doors into the system.</p>
     <div class="cards">
@@ -185,6 +168,27 @@
         <p>Make the garden self-maintaining: sensors + a liquid-fertilizer tank that water and feed on your approval. Full parts list, sourcing, and layman setup — under $250.</p>
         <div class="tags"><span class="pill">ESP32 + sensors</span><span class="pill">&lt; $250</span><span class="pill">Solder-free</span></div>
         <span class="go">Open build guide →</span>
+      </a>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="sec-h">Point your camera. Skip the setup.</h2>
+    <p class="sec-sub">Two AI tools handle the tedious parts — building your garden, and figuring out what’s wrong with a plant.</p>
+    <div class="aicards">
+      <a class="aicard build" href="dashboard.html#build">
+        <div class="ic f"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L8 6H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1h-4Z"/><circle cx="12" cy="12.5" r="3.4"/></svg></div>
+        <h3>Build your garden from a photo</h3>
+        <p>Snap one or more photos of your beds. AI detects every bed and plant, merges multiple angles, and adds them with the right watering, feeding, and pest profiles — no manual entry.</p>
+        <div class="tags"><span class="pill">Multi-photo</span><span class="pill">Auto care profiles</span><span class="pill">No key on the live site</span></div>
+        <span class="go">Build from a photo →</span>
+      </a>
+      <a class="aicard diag" href="dashboard.html#diagnose">
+        <div class="ic a"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4v5a5 5 0 0 0 10 0V4"/><path d="M9 18a4 4 0 0 0 8 0v-3"/><circle cx="18" cy="13" r="2.3"/></svg></div>
+        <h3>Diagnose a sick plant</h3>
+        <p>Photograph a struggling plant, pest, or weed and get an instant ID plus an IPM-first treatment ladder — least-toxic first, with pollinator and pre-harvest safety noted.</p>
+        <div class="tags"><span class="pill">Instant ID</span><span class="pill">IPM-first plan</span><span class="pill">Hosted — no key</span></div>
+        <span class="go">Diagnose a plant →</span>
       </a>
     </div>
   </section>
