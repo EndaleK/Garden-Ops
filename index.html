@@ -120,9 +120,9 @@
       <button class="theme-btn" id="themeBtn" aria-label="Toggle day / night"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>
     </div>
     <div class="hero-main">
-      <span class="eyebrow">🌱 Edmonton, AB · Hardiness Zone 4a</span>
+      <span class="eyebrow" id="eyebrow">🌱 Plan any backyard · Canada &amp; US hardiness zones</span>
       <h1>Your garden, <em>run like operations.</em></h1>
-      <p class="tagline">A weather-aware command center for one backyard garden — it tracks every plant, computes watering from live Edmonton weather, schedules feeding and IPM-first pest control, and is wired to grow into a self-maintaining, sensor-driven system.</p>
+      <p class="tagline">A weather-aware command center for your backyard garden — it tracks every plant, computes watering from live local weather, schedules feeding and IPM-first pest control, and is wired to grow into a self-maintaining, sensor-driven system.</p>
       <div class="hero-cta">
         <a class="btn" href="dashboard.html">Open the dashboard
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
@@ -136,12 +136,13 @@
 </header>
 
 <main class="wrap">
-  <div class="stats">
-    <div class="stat"><div class="v">4a</div><div class="l">Hardiness zone</div></div>
-    <div class="stat"><div class="v">7</div><div class="l">Garden beds</div></div>
-    <div class="stat"><div class="v">19</div><div class="l">Plantings</div></div>
-    <div class="stat"><div class="v">65</div><div class="l">Plants tracked</div></div>
-    <div class="stat live"><div class="v" id="liveTemp">—</div><div class="l" id="liveLbl">Edmonton now</div></div>
+  <!-- Default = new-user value-props (no fake garden data). JS upgrades to the visitor's real stats if they have a saved garden. -->
+  <div class="stats" id="stats">
+    <div class="stat"><div class="v">12</div><div class="l">Plant care types</div></div>
+    <div class="stat"><div class="v">7</div><div class="l">Climate regions</div></div>
+    <div class="stat"><div class="v">2</div><div class="l">AI photo tools</div></div>
+    <div class="stat"><div class="v">Free</div><div class="l">No login or key</div></div>
+    <div class="stat live"><div class="v">✓</div><div class="l">Saved in your browser</div></div>
   </div>
 
   <section>
@@ -226,11 +227,34 @@
     function paint(){btn.innerHTML=root.dataset.theme==='day'?moon:sun;document.querySelector('meta[name=theme-color]').setAttribute('content',root.dataset.theme==='day'?'#dfe7d8':'#0d1410');}
     paint();
     btn.addEventListener('click',function(){root.dataset.theme=root.dataset.theme==='day'?'night':'day';try{localStorage.setItem('gardenTheme',root.dataset.theme);}catch(e){}paint();});
-    // live "Edmonton now" temp (Open-Meteo, no key)
-    fetch('https://api.open-meteo.com/v1/forecast?latitude=53.5461&longitude=-113.4938&current=temperature_2m&timezone=America%2FEdmonton')
-      .then(function(r){return r.json();})
-      .then(function(j){var t=j&&j.current&&j.current.temperature_2m;if(t!=null){document.getElementById('liveTemp').innerHTML=Math.round(t)+'<small>°C</small>';}})
-      .catch(function(){document.getElementById('liveTemp').textContent='—';document.getElementById('liveLbl').textContent='Edmonton';});
+
+    /* Adaptive hero stats: returning users (a garden saved in this browser) see THEIR real
+       numbers + their city's live temp; new users keep the product value-props rendered above. */
+    function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+    function tile(v,l,live){return '<div class="stat'+(live?' live':'')+'"><div class="v">'+v+'</div><div class="l">'+l+'</div></div>';}
+    function readCfg(){try{return JSON.parse(localStorage.getItem('gardenUserConfig')||'null');}catch(e){return null;}}
+    function liveTemp(lat,lon,tz){
+      fetch('https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&current=temperature_2m&timezone='+encodeURIComponent(tz||'auto'))
+        .then(function(r){return r.json();})
+        .then(function(j){var t=j&&j.current&&j.current.temperature_2m,el=document.getElementById('liveTemp');if(el&&t!=null)el.innerHTML=Math.round(t)+'<small>°C</small>';})
+        .catch(function(){});
+    }
+    (function renderStats(){
+      var cfg=readCfg(),box=document.getElementById('stats');if(!box)return;
+      var has=cfg&&Array.isArray(cfg.beds)&&cfg.beds.length>0;
+      if(!has)return; // keep the static value-props for new users
+      var beds=cfg.beds.length;
+      var plantings=cfg.beds.reduce(function(s,b){return s+((b.plants&&b.plants.length)||0);},0);
+      var plants=cfg.beds.reduce(function(s,b){return s+((b.plants||[]).reduce(function(t,p){return t+Math.max(1,parseInt(p.qty)||1);},0));},0);
+      var zone=(cfg.climate&&cfg.climate.zone)||(cfg.location&&cfg.location.zone)||'—';
+      var loc=cfg.location,hasLoc=loc&&loc.lat!=null&&loc.lon!=null;
+      var fifth=hasLoc?tile('<span id="liveTemp">—</span>',esc((loc.city||'Local'))+' now',true):tile('✓','Saved in your browser',true);
+      box.innerHTML=tile(esc(zone),'Your hardiness zone')+tile(beds,'Your bed'+(beds===1?'':'s'))+
+        tile(plantings,'Planting'+(plantings===1?'':'s'))+tile(plants,'Plant'+(plants===1?'':'s'))+fifth;
+      var eb=document.getElementById('eyebrow');
+      if(eb)eb.innerHTML='🌱 '+(loc&&loc.city?esc(loc.city)+(loc.province?', '+esc(loc.province):''):'Your garden')+(zone&&zone!=='—'?' · Hardiness Zone '+esc(zone):'');
+      if(hasLoc)liveTemp(loc.lat,loc.lon,loc.timezone);
+    })();
   })();
 </script>
 </body>
